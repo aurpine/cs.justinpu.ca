@@ -1,5 +1,5 @@
 # cs.justinpu.ca
-An educational computer science site
+An educational computer science site hosted at http://cs.justinpu.ca
 
 ## Features
 

@@ -1,0 +1,198 @@
+<!doctype html>
+<html>
+<head>
+	<title>JDCC February 2016 Java Editorial | cs.justinpu.ca</title>
+	<link rel="stylesheet" type="text/css" href="http://cs.justinpu.ca/stylesheet.css">
+	<link rel="stylesheet" href="http://cs.justinpu.ca/highlight/styles/jpcolour.css">
+	<link rel="icon" type="image/png" href="http://cs.justinpu.ca/icon.png">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+</head>
+<body>
+	<div class="main">
+		<a>C++ Version <a href="http://cs.justinpu.ca/jeditorials/jdcc/feb16/"><small>Java here</small></a></p>
+		<h1>JDCC: February 2016</h1>
+        <hr />
+		
+		<h2>Problems</h2>
+        <ul>
+            <li><a href="#a" class="internal">Problem A: Palindromes</a></li>
+            <li><a href="#b" class="internal">Problem B: Ants on a Log</a></li>
+            <li><a href="#c" class="internal">Problem C: Sorting Trains</a></li>
+            <li><a href="#d" class="internal">Problem D: Roadwork</a></li>
+            <li><a href="#e" class="internal">Problem E: Pocket Change</a>
+            </li>
+        </ul>
+		
+		<h2 id="a">Problem A: Palindromes</h2>
+        <hr />
+        
+		<p>Iterate through half of the string to check if each character is identical to the corresponding character. </p>
+        
+        <p><strong>Complexity:</strong> \(O(N / 2)\)</p>
+		
+		<pre><code class="java">import java.io.*;
+import java.util.*;
+
+class Feb16A {
+    public static void main(String[] args) throws IOException {
+    	Scanner in = new Scanner(new FileReader("A.in"));
+    	PrintWriter out = new PrintWriter(new FileWriter("A.out"));
+    	int T = in.nextInt(); 
+    	String s;
+    	boolean palindrome;
+    	for(int t = 0; t &lt; T; t++) {
+    	    s = in.next();
+    	    palindrome = true;
+    	    for(int i = 0; i &lt; s.length() / 2; i++) {
+                if(s.charAt(i) != s.charAt(s.length() - i - 1)) {
+                    palindrome = false;
+                    break;
+                }
+    	    }
+    	    out.println(palindrome ? "YAY" : "NAY");
+    	}
+    	out.close();
+    }
+}</code></pre>
+        
+		<h2 id="b">Problem B: Ants on a Log</h2>
+        <hr />
+        
+		<p>The trick in this problems is realizing that each ant isn't unique. When a collision occurs, instead of treating it as if each ant turns around, you can see it as all the ants ignore the other ants and that they just go through each other. </p>
+        
+        <p>With this in mind, all you need to do is to find the ant which is the maximum distance away from reaching the end of the log. </p>
+        
+        <p><strong>Complexity:</strong> \(O(N)\)</p>
+		
+		<pre><code class="java">import java.io.*;
+import java.util.*;
+
+class Feb16B {
+    public static void main(String[] args) throws IOException {
+    	Scanner in = new Scanner(new FileReader("B.in"));
+    	PrintWriter out = new PrintWriter(new FileWriter("B.out"));
+    	int T = in.nextInt();
+    	for(int t = 0; t &lt; T; t++) {
+    	    int N = in.nextInt(), L = in.nextInt();
+    	    int P;
+    	    String dir;
+    	    int time, max = 0;
+    	    for(int n = 0; n &lt; N; n++) {
+    	        P = in.nextInt();
+    	        dir = in.next();
+    	        if((time = (dir.equals("left") ? P : L - P)) &gt; max)
+    		        max = time;
+            }
+    	    out.println(max);
+    	}
+    	out.close();
+    }
+}</code></pre>
+
+		<h2 id="c">Problem C: Sorting Trains</h2>
+        <hr />
+        
+		<p>This is a greedy/data structures problem. Each track must contain trains in increasing order. This means that a wagon should greedily be placed into the track with the highest last train possible (but still lower than the current wagon). If this is not possible, we must use a new track. We don't need to keep track of all the trains in each track, we only need to know the number of the last train in each track. The optimal data structure to use is a set (TreeSet). A TreeSet contains unique elements in sorted order. To find the largest track (determined by the last train), we use binary search through the set. This operation is \(O(\log N)\). Adding is also \(O(\log N)\). </p>
+        
+        <p><strong>Complexity:</strong> \(O(2N \log N)\)</p>
+        
+		<pre><code class="cpp">import java.io.*;
+import java.util.*;
+
+class Feb16C {
+    public static void main(String[] args) throws IOException {
+        Scanner in = new Scanner(new FileReader("C.in"));
+        PrintWriter out = new PrintWriter(new FileWriter("C.out"));
+        int T = in.nextInt(); 
+        for(int t = 0; t &lt; T; t++) {
+            int N, wagon;
+            Integer i;
+            N = in.nextInt();
+            TreeSet&lt;Integer&gt; tracks = new TreeSet&lt;Integer&gt;();
+            for(int n = 0; n &lt; N; n++) {
+                wagon = in.nextInt();
+                if((i = tracks.lower(wagon)) != null)
+                    tracks.remove(i);
+                tracks.add(wagon);
+            }
+            out.println(tracks.size());
+        }
+        out.close();
+    }
+}</code></pre>
+		
+		<h2 id="d">Problem D: Roadwork</h2>
+		<hr />
+        
+		<p>This is a very simple graph theory problem. The given graph is a tree (an undirected acyclic graph with one path for each pair of points). To build the longest cycle, we must connect the longest chain to itself. Finding the longest chain of a tree is called finding it's diameter. </p>
+        
+        <p>To find the diameter, use BFS (breadth first search), starting from any point to the farthest point (or one of them). Then we BFS again from this point to find the longest path. We output this length + 1 as the length of the longest cycle possible. </p>
+        
+        <p><strong>Complexity:</strong> \(O(2N)\)</p>
+        
+        <pre><code class="cpp">#include &lt;fstream&gt;
+#include &lt;vector&gt;
+#include &lt;queue&gt;
+
+using namespace std;
+
+vector&lt;vector&lt;int&gt; &gt; adj;
+
+pair&lt;int, int&gt; bfs(int start) { // return farthest building, longest path
+    queue&lt;pair&lt;int, int&gt; &gt; Q;
+    vector&lt;bool&gt; vis(adj.size(), false);
+    Q.push(make_pair(start, 0));
+    vis[start] = true;
+    int x, dist, maxd = -1, b = start;
+    while(!Q.empty()) {
+        int x = Q.front().first; dist = Q.front().second; Q.pop();
+        if(dist &gt; maxd) {
+            maxd = dist;
+            b = x;
+        }
+        for(auto i = adj[x].begin(); i != adj[x].end(); i++)
+            if(!vis[*i]) {
+                vis[*i] = true;
+                Q.emplace(*i, dist + 1);
+        }
+    }
+    return make_pair(b, maxd);
+}
+
+int main() {
+    ifstream in("D.in");
+    ofstream out("D.out");
+    int T;
+    in &gt;&gt; T;
+    for(int t = 0; t &lt; T; t++) {
+        int N, A, B;
+        in &gt;&gt; N;
+        adj = vector&lt;vector&lt;int&gt; &gt;(N + 1);
+        for(int n = 1; n &lt; N; n++) {
+            in &gt;&gt; A &gt;&gt; B;
+            adj[A].push_back(B);
+            adj[B].push_back(A);
+        }
+        out &lt;&lt; bfs(bfs(1).first).second + 1 &lt;&lt; endl;
+    }
+    return 0;
+}
+</code></pre>
+		
+		<h2 id="e">Problem E: Pocket Change</h2>
+        <hr />
+        
+		<p>Meh.</p>
+        
+        <p>Possible pointers: dynamic programming, coin change problem, combinatorics. </p>
+	
+	</div>
+	
+	<span id="footer"></span>
+    <span id="header"></span>
+	
+	<script src="http://cs.justinpu.ca/highlight/highlight.pack.js"></script>
+	<script>hljs.initHighlightingOnLoad();</script>
+	<script src="http://cs.justinpu.ca/script.js"></script>
+</body>
+</html>

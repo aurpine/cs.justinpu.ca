@@ -1,0 +1,75 @@
+<!doctype html>
+<html>
+<head>
+	<title>7Nov15 CPT Editorial | cs.justinpu.ca</title>
+	<link rel="stylesheet" type="text/css" href="http://cs.justinpu.ca/stylesheet.css">
+	<link rel="stylesheet" href="http://cs.justinpu.ca/highlight/styles/jpcolour.css">
+	<link rel="icon" type="image/png" href="http://cs.justinpu.ca/icon.png">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+</head>
+<body>
+	<div class="main">
+		<p>C++ version<a href="http://cs.justinpu.ca/jeditorials/cpt/7nov15/"><small>Java here</small></a></p>
+		<h1>CPT: 7 November 2015</h1>
+		
+		<h2>Problem #2: Genetic Probability</h2>
+		<p>This is a combinatorics problem. The overall probability is the combined probability 
+		of each pairs of the genes. So therefore, you just simply multiply the probabilities of 
+		the individual genes to find the over probability. </p>
+		
+		<p>Since there are only 4 possible combinations of gene matching, we can just hard code 
+		the four possibilities to check if the combination matches the target gene. Since it is 
+		a combination and not a permutation (<code>"aA"</code> is the same as <code>"Aa"</code>), 
+		we have to check the different orders. </p>
+		
+		<p>Since these are strings and only capital and non-capital letters of the same letter are 
+		in one gene, we can just add up the <code>char</code> values and check if the sum is equal 
+		to that of the target. </p>
+		
+		<p>We find that <code>n</code> out of the four possibilities yield the target and we update 
+		the overall chance by multiplying by <code>n / 4</code>. </p>
+		
+		<pre><code>#include &ltiostream&gt
+#include &ltstring&gt
+
+using namespace std;
+
+int main() {
+	int T;
+	cin >> T;
+	for(int t = 0; t &lt T; t++) {
+		int N;
+		cin >> N;
+		string a, b, c; // a, b - parents, c - offspring
+		cin >> a >> b >> c;
+		double prob = 1; // Total probability of target
+		
+		for(int n = 0; n &lt N; n++) {
+			int pos = 0; // Possibility out of 4
+			int sum = c[n * 2] + c[n * 2 + 1]; // pair sum of offspring
+			
+			if(a[n * 2] + b[n * 2] == sum)
+				pos++;
+			if(a[n * 2] + b[n * 2 + 1] == sum)
+				pos++;
+			if(a[n * 2 + 1] + b[n * 2] == sum)
+				pos++;
+			if(a[n * 2 + 1] + b[n * 2 + 1] == sum)
+				pos++;
+			prob *= pos / 4.;
+		}
+		cout << prob << endl;
+	}
+	return 0;
+}</code></pre>
+	
+	</div>
+	
+	<span id="footer"></span>
+    <span id="header"></span>
+	
+	<script src="http://cs.justinpu.ca/highlight/highlight.pack.js"></script>
+	<script>hljs.initHighlightingOnLoad();</script>
+	<script src="http://cs.justinpu.ca/script.js"></script>
+</body>
+</html>

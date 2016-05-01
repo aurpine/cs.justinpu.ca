@@ -1,0 +1,55 @@
+<!doctype html>
+<html>
+<head>
+	<title>Simulation | Algorithms | cs.justinpu.ca</title>
+	<link rel="stylesheet" type="text/css" href="http://cs.justinpu.ca/stylesheet.css">
+	<link rel="stylesheet" href="http://cs.justinpu.ca/highlight/styles/jpcolour.css">
+	<link rel="icon" type="image/png" href="http://cs.justinpu.ca/icon.png">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+</head>
+<body>
+	<div class="main">
+		<h1>Simulation</h1>
+		
+        <p>Simulation problems are where a process or situation is described, and as the solution, you make a program to simulate it. These problems are easy-the only challenge is implementing the solution. </p>
+        
+        <h2>Example</h2>
+        
+        <p>The <a href="https://en.wikipedia.org/wiki/Collatz_conjecture" target="_blank">Collatz Conjecture</a> says that if you take any number \(n\) and repeat the process: if \(n\) is odd, multiply by 3 and add 1, and if it's even, divide by 2, you will eventually reach 1. Given a number \(N\), find how many <i>iterations</i> of this process it takes to get to 1. </p>
+        
+        <p>The fastest and simplest way is to create a program to simulate this process and keep count of the number of iterations. </p>
+        
+        <pre><code>int c== 0; // counter
+while(N != 1) {
+    if(N % 2 == 0) // If N is even
+        N /= 2;
+    else
+        N = N * 3 + 1;
+    c++;
+}</code></pre>
+        
+        <h2>Conclusion</h2>
+        
+        <p>These problems require you to code a pattern/process/situation described. Generally, output when a given condition is met, i.e. number of iterations. Output could also be a value at a certain point in time. These solutions all require the use of a loop and variables to store counters or terms. </p>
+        
+        <p>These simulation problems vary and there's no specific way to solve them. Problem solving skills are required. You can train by attempting the practice problems below. </p>
+        
+        <h2>Practice Problems</h2>
+        
+        <ul>
+            <li><a href="http://jdcc.ca/data/2015-02-04-15-15-00/problems/B.pdf" target="_blank">JDCC February 2015 B</a></li>
+            <li><a href="https://cemc.math.uwaterloo.ca/contests/computing/2011/stage1/juniorEn.pdf" target="_blank">CCC 2011</a> J2</li>
+            <li><a href="https://cemc.math.uwaterloo.ca/contests/computing/2011/stage1/juniorEn.pdf" target="_blank">CCC 2011</a> J3</li>
+            <li><a href="https://cemc.math.uwaterloo.ca/contests/computing/2010/stage1/juniorEn.pdf" target="_blank">CCC 2010</a> J2</li>
+        </ul>
+        
+	</div>
+	
+	<span id="footer"></span>
+    <span id="header"></span>
+	
+	<script src="http://cs.justinpu.ca/highlight/highlight.pack.js"></script>
+	<script>hljs.initHighlightingOnLoad();</script>
+	<script src="http://cs.justinpu.ca/script.js"></script>
+</body>
+</html>

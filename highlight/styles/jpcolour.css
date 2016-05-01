@@ -1,0 +1,88 @@
+/*
+Custom theme made by Justin Pu
+*/
+
+@import url(https://fonts.googleapis.com/css?family=Source+Code+Pro:400,500);
+
+pre {
+	tab-size: 4;
+	-o-tab-size: 4;
+	-moz-tab-size: 4;
+}
+
+pre > code {
+	border: 0.1em solid #cccccc;
+	border-radius: 0;
+}
+
+pre *,
+code * {
+	font-family: Source Code Pro, Consolas, Courier New;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	background: #f5f5f5;
+	padding: 1.5em;
+	-webkit-text-size-adjust: none;
+	font-family: Source Code Pro;
+	font-size: 0.85em;
+}
+
+[class^="hljs"]::selection, .hljs::selection {
+	color: #ffffff;
+	background-color: #99ccff;
+}
+
+[class^="hljs"]::-moz-selection, .hljs::-moz-selection {
+	color: #ffffff;
+	background-color: #99ccff;
+}
+
+/* Comment green */
+.hljs-comment {
+  color: #4c984c;
+}
+
+/* Magenta */
+.hljs-number {
+	color: #ff00d4;
+}
+
+/* Blue */
+.hljs-preprocessor, .hljs-preprocessor .hljs-keyword {
+	color: #3366ff;
+	font-weight: 500;
+}
+
+.hljs-keyword {
+	color: #264cbf;
+	font-weight: 500;
+}
+
+.hljs-built_in {
+	color: #4d6099;
+}
+
+.hljs-variable {
+	color: #cb8c33;
+}
+
+.hljs-symbol {
+	font-weight: 500;
+}
+
+.hljs-title{
+	color: #009999;
+	font-weight: 500;
+}
+
+.hljs-params {
+	color: #6d29cc;
+}
+
+/* Red */
+.hljs-string {
+	color: #ff4040;
+}

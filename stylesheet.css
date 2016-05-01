@@ -1,0 +1,213 @@
+/*
+	Copyright ©Justin Pu.
+	You may not copy nor distribute this document without my given consent.
+	You may however use this for learning purposes. 
+*/
+
+@import url(https://fonts.googleapis.com/css?family=Montserrat);
+
+html {
+	background: #E6E6E6;
+}
+
+body {
+	margin: 3em 0;
+	padding: 0;
+}
+
+.title {
+	font-size: 2em;
+	font-family: Montserrat, Corbel;
+	font-weight: bolder;
+}
+
+.header {
+	text-align: left;
+	vertical-align: middle;
+	line-height: normal;
+	position: fixed;
+	top: 0;
+	width: 100%;
+	height: 3em;
+	background-color: #2EA9E6;
+	color: #FFFFFF;
+	margin: none;
+	clear: both;
+	float: both;
+	box-shadow: 0 -0.2em 1em 0.2em #808080;
+    border-top: 0.2em solid #ffffff;
+}
+
+.limiter {
+	color: #FFFFFF;
+	text-align: left;
+	margin: auto;
+	padding: none;
+	max-width: 73em;
+}
+
+
+
+.header a {
+	padding: 0.3em 0.5em;
+	transition: text-shadow 0.5s ease-out;
+}
+
+.header a:hover {
+	color: #7acaf3;
+	text-shadow: 0 0 0.5em #FFFFFF;
+}
+
+.header a:active {
+	color: #FFFFFF;
+	text-decoration: none;
+}
+
+.header a:visited {
+	color: #FFFFFF;
+	text-decoration: none;
+}
+
+.header a:link {
+	color: #FFFFFF;
+	text-decoration: none;
+}
+
+code {
+	padding: 0.2em 0.4em;
+	margin: 0.1em 0.2em;
+	font-family: Source Code Pro;
+	font-size: 0.8em;
+	background: #E5E5E5;
+	border-radius: 0.4em;
+}
+
+.main {
+	margin: auto;
+	padding: 2em;
+	max-width: 70em;
+	clear: both;
+	float: both;
+	overflow: auto;
+	background-color: rgba(255, 255, 255, 0.75);
+}
+
+.footer {
+	clear: both;
+	width: 100%;
+	height: 3em;
+	background-color: #2EA9E6;
+	position: fixed;
+	bottom: 0;
+	text-align: center;
+	color: #FFFFFF;
+	box-shadow: 0 0.2em 1em 0.2em #808080;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+h1 {
+	font-family: Montserrat, Corbel;
+	font-size: 2.5em;
+	color: #2EA9E6;
+	margin: 0 0 0.5em;
+}
+
+h2 {
+	font-family: Montserrat, Corbel;
+	font-size: 1.75em;
+	color: #52A3CC;
+	margin: 0.75em 0;
+    display: inline;
+}
+
+h3 {
+	font-family: Montserrat, Corbel;
+	font-size: 1.50em;
+	color: #488FB3;
+	margin: 0.25em 0;
+}
+
+* {
+	font-family: Montserrat, Corbel;
+	color: #4D4D4D;
+}
+
+ul {
+	list-style-type: square;
+}
+
+li {
+	padding: 0.25em 0;
+}
+
+strong {
+	font-weight: bold;
+	color: #1A5D80;
+}
+
+p {
+	line-height: 150%;
+}
+
+a:link {
+	color: #52A3CC;
+}
+
+a:visited {
+	color: #3D7A99;
+}
+
+a:hover {
+	color: #5CB7E6;
+}
+
+a:active {
+	color: #52A3CC;
+}
+
+::selection {
+	background: #2EA9E6;
+	color: #FFFFFF;
+}
+
+::-moz-selection {
+	background: #2EA9E6;
+	color: #FFFFFF;
+}
+
+table code {
+	font-family: Source Code Pro;
+	font-size: 0.8em;
+    background-color: inherit;
+    
+}
+
+table {
+    border: 1px solid #cccccc;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 0.2em 0.5em;
+    border-right: 1px solid #cccccc;
+    border-left: 1px solid #cccccc;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+tr:nth-child(odd) {
+    background-color: #e6e6e6;
+}
+
+th {
+    background-color: #5cb8e6;
+    color: #ffffff;
+}
+
+small {
+	font-size: 0.6em;
+}

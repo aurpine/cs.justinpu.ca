@@ -1,0 +1,373 @@
+<!doctype html>
+<html>
+<head>
+	<title>Mackenzie New Year's Challenge Editorial | cs.justinpu.ca</title>
+	<link rel="stylesheet" type="text/css" href="http://cs.justinpu.ca/stylesheet.css">
+	<link rel="stylesheet" href="http://cs.justinpu.ca/highlight/styles/jpcolour.css">
+	<link rel="icon" type="image/png" href="http://cs.justinpu.ca/icon.png">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+</head>
+<body>
+	<div class="main">
+		<p>C++ version <a href="http://cs.justinpu.ca/jeditorials/mackenzie_new_years_challenge/"><small>Java here</small></a></p>
+		<h1>Mackenzie New Year's Challenge</h1>
+        
+        <p>Note: Some implementations are left out. Also, they will be left as a practice. The problems will remain on DMOJ. You will still be able to submit your own solutions. </p>
+		
+		<h2>Problems</h2>
+        <ul>
+            <li><a href="#p1" class="internal">P1: King Modulus</a></li>
+            <li><a href="#p2" class="internal">P2: Moore's Law</a></li>
+            <li><a href="#p3" class="internal">P3: ECOO!</a></li>
+            <li><a href="#p4" class="internal">P4: Abdoof</a></li>
+            <li><a href="#p5" class="internal">P5: Jelly</a></li>
+            <li><a href="#p6" class="internal">P6: Rocks</a></li>
+        </ul>
+		
+		<h2 id="p1">P1: King Modulus</h2>
+        <a href="https://dmoj.ca/problem/mnycp1" target="_blank"><small>Problem</small></a>
+        <hr />
+        
+		<p>This is just a simple math problem. It required knowledge on the modulo function. Depending on the language, the function may perform negative modulo correctly or incorrectly. \(-7 \bmod 4 = 1\). Turing and Python, for example, perform this calculation correctly, while other languages such as C++ and Java instead calculate it as \(-7 \bmod 4 = -3\) which is wrong. To fix it up, just add \(M\) to the answer. </p>
+        
+        <p><strong>Complexity:</strong> \(O(1)\)</p>
+        
+        <pre><code class="cpp">#include &lt;iostream&gt;
+
+using namespace std;
+
+int main() {
+    int N, M;
+    cin &gt;&gt; N &gt;&gt; M;
+    N %= M;
+    if(N &lt; 0)
+        N += M;
+    cout &lt;&lt; N &lt;&lt; endl;
+    return 0;
+}</code></pre>
+        
+		<h2 id="p2">P2: Moore's Law</h2>
+        <a href="https://dmoj.ca/problem/mnycp2" target="_blank"><small>Problem</small></a>
+        <hr />
+        
+		<p>This problem, is yet again, another simple math problem. Use base 2 logarithm to find the number of years it takes for \(2.0\) to become the new number \(C\). Note that it doubles every <b>2 years</b>, and remember to divide \(C\) by \(2.0\) to find the change in clock speed. Then use if structures to determine what to output. </p>
+        
+        <p>Only output <code>Now!</code> when \(C\) is exactly \(2.0\). 
+        
+        <p><strong>Complexity:</strong> \(O(1)\)</p>
+        
+        <pre><code class="cpp">#include &lt;iostream&gt;
+#include &lt;cmath&gt;
+
+using namespace std;
+
+int main() {
+    double C;
+    cin &gt;&gt; C;
+    int days = ceil(log2(C / 2.0) * 730);
+    bool first = true;
+    if(days / 365 &gt;= 1) { // Years
+        cout &lt;&lt; days / 365 &lt;&lt; "Y";
+        first = false;
+        days %= 365;
+    }
+    if(days / 30 &gt;= 1) { // Months
+        if(first)
+            first = false;
+        else
+            cout &lt;&lt; " ";
+        cout &lt;&lt; days / 30 &lt;&lt; "M";
+        days %= 30;
+    }
+    if(days / 7 &gt;= 1) { // Weeks
+        if(first)
+            first = false;
+        else
+            cout &lt;&lt; " ";
+        cout &lt;&lt; days / 7 &lt;&lt; "W";
+        days %= 7;
+    }
+    if(days &gt;= 1) { // Days
+        if(first)
+            first = false;
+        else
+            cout &lt;&lt; " ";
+        cout &lt;&lt; days &lt;&lt; "D";
+    }
+    if(first)
+        cout &lt;&lt; "Now!";
+    cout &lt;&lt; endl;
+    return 0;
+}</pre></code>
+        
+		<h2 id="p3">P3: ECOO!</h2>
+        <a href="https://dmoj.ca/problem/mnycp3" target="_blank"><small>Problem</small></a>
+        <hr />
+        
+		<p>This is a search implementation problem. Read in all the teams. Find the best girls team and add their team name to the list of team names. Then, find the best 2 teams, excluding the best girls team, and add their team name to the list. If there are not enough teams at any point, then skip that part. E.g. if there are no girls teams, then skip searching for the best girls team. Sort the list and print out the teams. </p>
+        
+        <p><strong>Complexity:</strong> \(O(3N)\)</p>
+        
+        <h3>Alternative</h3>
+        
+        <p>You could also do this by sorting the list of teams. Go through the sorted list, finding the best girls team, optionally removing it afterwards. Then find the next 2 best teams. This method is less efficient, but may be easier to implement. </p>
+        
+        <p><strong>Complexity:</strong> \(O(N \log N)\)</p>
+        
+        <pre><code class="cpp">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;string&gt;
+#include &lt;algorithm&gt;
+
+using namespace std;
+
+struct team {
+    string S;
+    int P;
+    team() { }
+    team(string S, int P) {
+        this -&gt; S = S;
+        this -&gt; P = P;
+    }
+    bool operator&gt;(const team& comp) const {
+        return P &gt; comp.P;
+    }
+    bool operator==(const team& comp) const {
+        return S == comp.S;
+    }
+};
+
+int main() {
+    int N;
+    cin &gt;&gt; N;
+    vector&lt;team&gt; girls, general;
+    for(int n = 0; n &lt; N; n++) {
+        team temp;
+        string T;
+        cin &gt;&gt; temp.S &gt;&gt; T &gt;&gt; temp.P;
+        if(T == "girls")
+            girls.push_back(temp);
+        general.push_back(temp);
+    }
+    sort(girls.begin(), girls.end(), greater&lt;team&gt;());
+    sort(general.begin(), general.end(), greater&lt;team&gt;());
+    vector&lt;string&gt; names;
+    if(girls.size() &gt; 0) {
+        names.push_back(girls[0].S);
+        general.erase(find(general.begin(), general.end(), girls[0]));
+    }
+    if(general.size() &gt; 0) {
+        names.push_back(general[0].S);
+        if(general.size() &gt; 1)
+            names.push_back(general[1].S);
+    }
+    sort(names.begin(), names.end());
+    for(int i = 0; i &lt; names.size(); i++)
+        cout &lt;&lt; names[i] &lt;&lt; endl;
+    if(names.size() == 0)
+        cout &lt;&lt; "No ECOO :(" &lt;&lt; endl;
+    return 0;
+}</code></pre>
+		
+		<h2 id="p4">P4: Abdoof</h2>
+        <a href="http://jdcc.ca/data/2015-12-16-15-15-00/problems/D.pdf" target="_blank"><small>PDF</small></a>
+		<hr />
+        
+		<p>This is a string searching problem. Just scan through the whole name and check if it complies with the rules specified. </p>
+        
+        <p><strong>Complexity:</strong> \(O(N)\)</p>
+        
+        <h3>Alternative</h2>
+        
+        <p>Perform this using Java regex. It may be slower internally, but is significantly easier to implement. </p>
+        
+        <p>See the <a href="http://cs.justinpu.ca/jeditorials/mackenzie_new_years_challenge/#p4">Java P4 editorial</a>.</p>
+		
+		<h2 id="p5">P5: Jelly</h2>
+        <a href="https://dmoj.ca/problem/mnycp1" target="_blank"><small>Problem</small></a>
+        <hr />
+        
+        <p>This is a 3D graph theory problem. Use Dijkstra's algorithm to find the optimal path. Once any of the edges is reached, the Julie can escape, and the shortest path has been found. </p>
+        
+        <pre><code class="cpp">#include &lt;iostream&gt;
+#include &lt;queue&gt;
+
+using namespace std;
+
+int density[150][150][150]; // Densities of the blocks
+bool visited[150][150][150]; // Already visited
+int X, Y, Z;
+int dir[6][3]{{1,0,0},{0,1,0},{0,0,1},{-1,0,0},{0,-1,0},{0,0,-1}}; // Direction
+
+struct jelly {
+    int x, y, z, ate;
+    
+    bool operator&lt;(const jelly& comp) const { // For priority queue
+        return ate &gt; comp.ate;
+    }
+    
+    jelly() { }
+    
+    jelly(int x, int y, int z, int ate) {
+        this -&gt; x = x;
+        this -&gt; y = y;
+        this -&gt; z = z;
+        this -&gt; ate = ate;
+    }
+    
+    bool outside() {
+        return x == 0 || x == X - 1 || y == 0 || y == Y - 1 || z == 0 || z == Z - 1;
+    }
+};
+
+int main() {
+    scanf("%d %d %d", &X, &Y, &Z);
+    char c;
+    scanf("%c", &c);
+    jelly julie;
+    for(int z = 0; z &lt; Z; z++)
+        for(int y = 0; y &lt; Y; y++) {
+            for(int x = 0; x &lt; X; x++) {
+                scanf("%c", &c);
+                if(c == 'J') {
+                    julie = jelly(x, y, z, 0);
+                    density[x][y][z] = 0;
+                } else {
+                    density[x][y][z] = c - '0';
+                    visited[x][y][z] = false;
+                }
+            }
+            scanf("%c", &c);
+    }
+    priority_queue&lt;jelly&gt; pq;
+    pq.push(julie); // Start point
+    
+    while(true) {
+        jelly cur = pq.top(); pq.pop(); // Current
+        if(cur.outside()) {
+            printf("%d\n", cur.ate);
+            return 0;
+        }
+        if(visited[cur.x][cur.y][cur.z]) // Shorter path already found
+            continue;
+        visited[cur.x][cur.y][cur.z] = true;
+        for(int d = 0; d &lt; 6; d++) { // Move in the 6 directions
+            pq.emplace(cur.x + dir[d][0], cur.y + dir[d][1], cur.z + dir[d][2], 
+            cur.ate + density[cur.x + dir[d][0]][cur.y + dir[d][1]][cur.z + dir[d][2]]);
+        }
+    }
+    return 0;
+}</code></pre>
+        
+        <h2 id="p6">P6: Rocks</h2>
+        <a href="https://dmoj.ca/problem/mnycp1" target="_blank"><small>Problem</small></a>
+        <hr />
+        
+        <p>This is an implementation and data structures problem. You have to use a Fenwick tree and an unordered map to simulate the problem efficiently. The hashmap holds the position of the rocks, given the name. The unique part of this is adding elements into the Fenwick tree. </p>
+        
+        <p><strong>Complexity:</strong></p>
+        <ul>
+            <li>\(O( \log N)\) average for adding</li>
+            <li>\(O( 2 \log N)\) for swapping</li>
+            <li>\(O( 2 \log N)\) for finding mass</li>
+            <li>\(O( \log N + L)\) for replacing </li>
+            <li>\(O(1)\) for finding number of rocks </li>
+        </ul>
+        
+        <pre><code class="cpp">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;string&gt;
+#include &lt;unordered_map&gt;
+#include &lt;algorithm&gt;
+
+using namespace std;
+
+vector&lt;int&gt; masses(1); // Fenwick tree
+unordered_map&lt;string, int&gt; index; // Index of the string
+vector&lt;int&gt; mass(1); // Weight of a single rock
+
+int mass_of(string s) { // Finds the mass of a rock
+    int val = 0;
+    for(int i = 0; i &lt; s.size(); i++)
+        val += s[i] - 'a' + 1;
+    return val;
+}
+
+void update(int i, int c) { // i - index, c - change
+	for(; i &lt; masses.size(); i += (i & -i)) {
+		masses[i] += c;
+	}
+}
+
+int sum_of(int i) { // Index
+    if(i == 0)
+        return 0;
+	long long int sum = 0;
+	for(; i &gt; 0; i -= (i & -i))
+		sum += masses[i];
+	return sum;
+}
+
+void add(int v) { // Adds new weight v into line of rocks
+    int i = (masses.size() & -masses.size());
+    int val = v;
+    for(int n = masses.size() - 1; n &gt; masses.size() - i; n--)
+        val += mass[n];
+    masses.push_back(val);
+}
+
+int main() {
+    cin.sync_with_stdio(false); // Speeding up cin
+    cin.tie(0);
+    int C;
+    cin &gt;&gt; C;
+    for(int c = 0; c &lt; C; c++) {
+        string command;
+        cin &gt;&gt; command;
+        if(command == "A") {
+            string R;
+            cin &gt;&gt; R;
+            if(index[R] != 0) { // If rock already exists
+                cout &lt;&lt; "Can't add " &lt;&lt; R &lt;&lt; endl;
+                continue;
+            }
+            index[R] = masses.size();
+            mass.push_back(mass_of(R));
+            add(mass[index[R]]);
+        } else if(command == "S") { // Swap
+            string X, Y;
+            cin &gt;&gt; X &gt;&gt; Y;
+            int change = mass[index[Y]] - mass[index[X]];
+            update(index[X], change);
+            update(index[Y], -change);
+            swap(mass[index[X]], mass[index[Y]]);
+            swap(index[X], index[Y]);
+        } else if(command == "M") { // Finding mass
+            string X, Y;
+            cin &gt;&gt; X &gt;&gt; Y;
+            cout &lt;&lt; sum_of(max(index[X], index[Y])) - sum_of(min(index[X], index[Y]) - 1) &lt;&lt; endl;
+        } else if(command == "R") { // Replace
+            string X, Y;
+            cin &gt;&gt; X &gt;&gt; Y;
+            int ymass;
+            update(index[X], (ymass = mass_of(Y)) - mass[index[X]]);
+            index[Y] = index[X];
+            index[X] = 0;
+            mass[index[Y]] = ymass;
+        } else if(command == "N") { // Finding number of rocks
+            cout &lt;&lt; mass.size() - 1 &lt;&lt; endl;
+        }
+    }
+    return 0;
+}</code></pre>
+	
+	</div>
+	
+	<span id="footer"></span>
+    <span id="header"></span>
+	
+	<script src="http://cs.justinpu.ca/highlight/highlight.pack.js"></script>
+	<script>hljs.initHighlightingOnLoad();</script>
+	<script src="http://cs.justinpu.ca/script.js"></script>
+</body>
+</html>

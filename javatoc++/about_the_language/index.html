@@ -1,0 +1,84 @@
+<!doctype html>
+<html>
+<head>
+	<title>About the Language | J2C++ | cs.justinpu.ca</title>
+	<link rel="stylesheet" type="text/css" href="http://cs.justinpu.ca/stylesheet.css">
+	<link rel="stylesheet" href="http://cs.justinpu.ca/highlight/styles/jpcolour.css">
+	<link rel="icon" type="image/png" href="http://cs.justinpu.ca/icon.png">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+</head>
+<body>
+	<div class="main">
+	<h1>About the Language</h1>
+	<p>
+	There are many important similarities differences between Java and C++. 
+	This lesson is all about these similarities and differences.
+	</p>
+	
+	<h2>Syntax</h2>
+	<p>
+	As you may have noticed in the previous lesson. Code in Java and C++ look 
+	relatively the same.
+	</p>
+	<ul>
+		<li><code>;</code> - the semicolon</li>
+		<li><code>? :</code> - ternary operator</li>
+		<li><code>{ }</code> - a block</li>
+		<li><code>= *= /= += -= %= >>= <<=</code> - assignment operators</li>
+		<li><code>== &lt= &gt= !=</code> - boolean operators</li>
+		<li><code>,</code> - parameter separators</li>
+		<li>etc...</li>
+	</ul>
+	
+	<p>
+	C++ however does have a few additional syntax rules and features. 
+	Below is a very basic synopsis of these features and will be discussed 
+	in more detail later. 
+	</p>
+	<p>
+	The following code is the C++ equivalent of an import statement
+	</p>
+	<pre><code>#include &ltiostream&gt</code></pre>
+	<p>
+	This is an example of pointers and references.
+	</p>
+	<pre><code>int a = 5;
+int *b = &amp;a;</code></pre>
+	
+	<h2>Files</h2>
+	<p>
+	Java files have the extension <code>.java</code> and are 
+	compiled into <i>bytecode</i> with the extension <code>.class</code>
+	</p>
+	<p>
+	C++ files have the extension <code>.cpp</code> and are compiled 
+	into an executable file (<code>.exe</code>). 
+	</p>
+	<p>
+	An executable file can be directly run, while a .class file can not. 
+	</p>
+	
+	<h2>Language Mechanics</h2>
+	
+	<p>
+	Java is a multi-platform language and supports many operating systems. 
+	This is accomplished with the use of a virtual machine (JVM) on which 
+	all Java programs are run on. This may make execution slow. 
+	</p>
+	<p>
+	C++ on the other hand, doesn't support as many languages. Windows and 
+	Linux based systems can run them with ease, but other operating systems 
+	such as MacOS aren't as compatible. It runs directly from the operating 
+	system and is thus faster than Java, but also potentially harmful.
+	</p>
+	
+	</div>
+	
+	<span id="footer"></span>
+    <span id="header"></span>
+	
+	<script src="http://cs.justinpu.ca/highlight/highlight.pack.js"></script>
+	<script>hljs.initHighlightingOnLoad();</script>
+	<script src="http://cs.justinpu.ca/script.js"></script>
+</body>
+</html>

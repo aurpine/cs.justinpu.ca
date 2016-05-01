@@ -1,0 +1,65 @@
+<!doctype html>
+<html>
+<head>
+	<title>Simple Arrays | J2C++ | cs.justinpu.ca</title>
+	<link rel="stylesheet" type="text/css" href="http://cs.justinpu.ca/stylesheet.css">
+	<link rel="stylesheet" href="http://cs.justinpu.ca/highlight/styles/jpcolour.css">
+	<link rel="icon" type="image/png" href="http://cs.justinpu.ca/icon.png">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+</head>
+<body>
+	<div class="main">
+	<h1>Simple Arrays</h1>
+	
+	<p>Typically in Java, arrays are declared and initialized as follows: </p>
+	
+	<pre><code class="c++">int[] a;
+int b[]; // Alternative
+int[] c = new int[10]; // An int array initialized to size of 5</code></pre>
+	
+	<p>In C++, the brackets to indicate that the variable is in fact an array, comes after the variable name. It also has to have an integer to indicate its length. This means that you cannot have a global array with a size to be determined in the future. </p>
+	
+	<pre><code class="c++">int a[5]; // Array of size 5
+int b[]; // Error - has to indicate size of array
+int[5] c; // Error - [5] has to come after</code></pre>
+	
+	<p>The above was just declaring int arrays, there are ways to initialize them. The following are all valid methods of initialization. </p>
+	
+	<pre><code class="c++">int a[5] = {1, 2, 3, 4, 5};
+int b[] = {1, 2, 3, 4, 5}; // Compiler assumes size of 5
+int c[5] = {1, 2, 3}; // First 3 values have the assigned values
+int d[] {1, 2, 3, 4, 5}; // Size of 5
+int e[5] {1, 2, 3, 4, 5};
+int f[5] {1, 2, 3}; // First 3 have values</code></pre>
+	
+	<p>2D arrays are very similar. </p>
+	
+	<pre><code class="java">int a[2][2];
+int b[2][2] = {{1, 2}, {3, 4}};
+int c[2][2] {{1, 2}, {3, 4}};</code></pre>
+	
+	<p>Although you are able to initialize a local array with a variable size, you aren't able to initialize a 2D array with a variable size (nor any other multi-dimensional array). As an alternative, programmers often create global arrays with a very large size-usually the maximum as specified by the input constraints. </p>
+	
+	<pre><code class="java">int n = 5;
+int a[n]; // Valid
+int a[n][n]; // Invalid - error</code></pre>
+	
+	<p>For example, if the problem states that the maximum length and width of a map to store, you would create a global 2D array with both sizes as 150. The parts of the array that you wouldn't use are quite negligible. Memory is plentiful and there should be enough to solve the biggest test cases, unless of course, your algorithm is wrong. </p>
+	
+	<pre><code class="java">int map[150][150];
+int main() {
+	// Stuff here
+}</code></pre>
+	
+	<p>In Java, there exists the <code>.length</code> method to retrieve the size of the array. Unfortunately, in C++, ways to find the length of an array are complicated. It is way simpler to store the size in a separate variable, since the size is as given from the input, or at least you can keep track of the size, if it were to grow. However, there is an alternate to arrays called <code>vector</code> which will be discussed later. It is the <code>ArrayList</code> of C++. There are many features of the <code>vector</code> class. </p>
+	
+	</div>
+	
+	<span id="footer"></span>
+    <span id="header"></span>
+	
+	<script src="http://cs.justinpu.ca/highlight/highlight.pack.js"></script>
+	<script>hljs.initHighlightingOnLoad();</script>
+	<script src="http://cs.justinpu.ca/script.js"></script>
+</body>
+</html>

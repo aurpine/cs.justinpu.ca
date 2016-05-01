@@ -1,0 +1,132 @@
+<!doctype html>
+<html>
+<head>
+	<title>JDCC November 2015 Java Editorial | cs.justinpu.ca</title>
+	<link rel="stylesheet" type="text/css" href="http://cs.justinpu.ca/stylesheet.css">
+	<link rel="stylesheet" href="http://cs.justinpu.ca/highlight/styles/jpcolour.css">
+	<link rel="icon" type="image/png" href="http://cs.justinpu.ca/icon.png">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+</head>
+<body>
+	<div class="main">
+		<a>Java Version <a href="http://cs.justinpu.ca/editorials/jdcc/nov15/"><small>C++ here</small></a></p>
+		<h1>JDCC: October 2015</h1>
+		
+		<h2>Problems</h2>
+		<ul>
+            <li><a href="#a" class="internal">Problem A: Lifting Weights</a></li>
+            <li><a href="#b" class="internal">Problem B: Icy Spiral</a></li>
+            <li><a href="#c" class="internal">Problem C: eLettery</a></li>
+            <li><a href="#d" class="internal">Problem D: Lucky Tickets</a></li>
+            <li><a href="#e" class="internal">Problem E: Randomize</a></li>
+        </ul>
+		
+		<h2 id="a">Problem A: Lifting Weights</h2>
+		<p>The program describes an arithmetic sequence, \(A, A + B, A + 2B, A + 3B ... A + (N - 1)B\). The \(N\)th term can be expressed as \(A + (N - 1)B\). </p>
+		
+		<pre><code>import java.util.*;
+import java.io.*;
+
+class Nov15A {
+    public static void main(String[] args) throws IOException {
+        Scanner in = new Scanner(new FileReader("A.in"));
+        PrintWriter out = new PrintWriter(new FileWriter("A.out"));
+        
+        int T = in.nextInt();
+        for(int t = 0; t &lt; T; t++) {
+            int A = in.nextInt(), B = in.nextInt(), C = in.nextInt();
+            out.println(A + B * N - B);
+        }
+        out.close();
+    }
+}
+</code></pre>
+        
+		<h2 id="b">Problem B: Icy Spiral</h2>
+		
+		<p>This problem can be solved using math. For each <i>lap</i> that is completed, there are two turns on the right side. If there are an odd amount of rows, there is no turn on the right side for when there is only one row right. We can use the expression \(H / 2 \times 2\) to find the number of turns on the right side. It works for odd rows too because it truncates. Since the zamboni starts on the left side, we can use the same formula, but subtract one \((H - 1) / 2 \times 2\). We add these two together to find the total number of turns. </p>
+        
+        <p>For the solution described above however, it assumes that there are more rows than there are columns. If there are less rows than columns, then we can replace rows (H) with columns (R) in the formula. </p>
+		
+		<pre><code>import java.util.*;
+import java.io.*;
+
+class Nov15B {
+    public static void main(String[] args) throws IOException {
+        Scanner in = new Scanner(new FileReader("B.in"));
+        PrintWriter out = new PrintWriter(new FileWriter("B.out"));
+        
+        int T = in.nextInt();
+        for(int t = 0; t &lt; T; t++) {
+            int H = in.nextInt(), W = in.nextInt();
+            if(H &lt; W)
+                out.println(H / 2 * 2 + (H - 1) / 2 * 2);
+            else
+                out.println(W / 2 * 2 + (W - 1) / 2 * 2);
+        }
+        out.close();
+    }
+}</code></pre>
+
+		<h2 id="c">Problem C: eLettery</h2>
+		
+		<p>This is a search problem. We have to find the two people who have the most letters in common. To do this, we count the number of each letter each name contains. Then we can compare the number of letters in common. Note that if one name has one 'A' and the other name has two 'A's, then they only have 1 'A' in common. So, we just take the minimum of the two number of letters. </p>
+        
+        <p>It is also important to note tiebreakers. If the two have the same number of letters in common, take the alphabetically first (lower) name. Name <i>A</i> is first if A &lt B. To search, just loop through the all the names and have a variable to hold the best match name and the common letters of the best match. </p>
+		
+		<pre><code>import java.util.*;
+import java.io.*;
+
+class Nov15C {
+    public static void main(String[] args) throws IOException {
+        Scanner in = new Scanner(new FileReader("C.in"));
+        PrintWriter out = new PrintWriter(new FileWriter("C.out"));
+        
+        int T = in.nextInt();
+        for(int t = 0; t &lt; T; t++) {
+            String S = in.next();
+            int[] amount = new int[26]; // Amount of each letter
+            for(int i = 0; i &lt; S.length(); i++)
+                amount[S.charAt(i) - 'A']++; // Adding 1 to the amount of this letter
+            int N = in.nextInt();
+            int max = 0;
+            String name = "";
+            for(int n = 0; n &lt; N; n++) {
+                String C = in.next();
+                int[] temp = new int[26]; // Temporary amount of each letter for this person
+                for(int i = 0; t &lt; C.length(); i++)
+                    temp[C.charAt(i) - 'A']++; // Adding 1 to the amount of this letter
+                int common = -1; // Number of letters in common
+                for(int i = 0; i &lt; 26; i++)
+                    common += Math.min(temp[i], amount[i]);
+                
+                if(common &gt; max) {
+                    name = C;
+                    max = common;
+                } else if(common == max)
+                    name = (C.compareTo(name) &lt; 0 ? C : name);
+            }
+            out.println(name);
+        }
+        out.close();
+    }
+}</code></pre>
+		
+		<h2 id="d">Problem D: Basically Right</h2>
+		
+		<p>Coming soon :(</p>
+		
+		<h2 id="e">Problem E: Estuary</h2>
+		
+		<p>Coming soon :(</p>
+		
+	</div>
+	
+	<span id="footer"></span>
+    <span id="header"></span>
+	
+	<script src="http://cs.justinpu.ca/highlight/highlight.pack.js"></script>
+	<script>hljs.initHighlightingOnLoad();</script>
+	<script src="http://cs.justinpu.ca/script.js"></script>
+</body>
+</html>

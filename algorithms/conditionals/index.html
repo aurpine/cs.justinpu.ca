@@ -1,0 +1,78 @@
+<!doctype html>
+<html>
+<head>
+	<title>Conditionals | Algorithms | cs.justinpu.ca</title>
+	<link rel="stylesheet" type="text/css" href="http://cs.justinpu.ca/stylesheet.css">
+	<link rel="icon" type="image/png" href="http://cs.justinpu.ca/icon.png">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+</head>
+<body>
+	<div class="main">
+		<h1>Conditionals</h1>
+		
+		<p>Conditionals are fundamental to programming contests. They are used extensively in other problem types, such as sorting and searching. This lesson will concentrate on simple conditional problems. </p>
+		
+		<h2>If Structure</h2>
+		
+		<p>A common problem is to print output, depending on the input given. </p>
+		
+		<p><strong>Problem:</strong> Print whether a number given is less than, equal to, or greater than the number 10. </p>
+		
+		<p>To solve this problem, we just use an if structure to check which range it is in. </p>
+		
+		<pre><code>get number
+if number &lt 10
+	print "less than 10"
+else if number &gt 10
+	print "greater than 10"
+else
+	print "equal to 10"</code></pre>
+		
+		<p>There are other, more difficult problems requiring the use of conditions. </p>
+		
+		<h2>Switch-Case</h2>
+		
+		<p>Switch blocks are another type of conditionals statements. These aren't often used, but may be faster. <p>
+		
+		<p>If we were given a number, either 1, 2 or 3, and had to print A, B and C respectively, this will be very easy with a switch-case block. </p>
+		
+		<pre><code>switch (num) {
+	case 1: print "A"; return;
+	case 2: print "B"; return;
+	case 3: print "C"; return;
+}</pre></code>
+		
+		<p>A positive feature, although never used, is that after a case is found, it continues running subsequent code. </p>
+		
+		<p>An example would be if I had 3 types of bags. Bag 1, has an A element. Bag 2 has an A element and a B element. Finally, bag 3 has one of each A, B and C elements. We could then use a switch-case block to find the number of each element there is in a bag. Put this statement in a for loop to find the total number of each element in all the bags. </p>
+		
+		<pre><code>switch (bag) {
+	case 3: C++;
+	case 2: B++;
+	case 1: A++;
+}</pre></code>
+		
+		<h2>Continuation</h2>
+		
+		<p>Not all conditionals problems are as easy as these examples. As you continue, these problems require you to use compound conditions and math operations within the conditions. </p>
+		
+		<h2>Practice Problems</h2>
+		<ul>
+			<li><a href="https://cemc.math.uwaterloo.ca/contests/computing/2015/stage%201/juniorEn.pdf" target="_blank">CCC 2015</a> J1</li>
+			<li><a href="https://cemc.math.uwaterloo.ca/contests/computing/2011/stage1/juniorEn.pdf" target="_blank">CCC 2011</a> J1</li>
+			<li><a href="https://cemc.math.uwaterloo.ca/contests/computing/2012/stage1/juniorEn.pdf" target="_blank">CCC 2012</a> J1</li>
+			<li><a href="https://cemc.math.uwaterloo.ca/contests/computing/2013/stage1/juniorEn.pdf" target="_blank">CCC 2013</a> J1</li>
+			<li><a href="https://cemc.math.uwaterloo.ca/contests/computing/2014/stage%201/juniorEn.pdf" target="_blank">CCC 2014</a> J1</li>
+            <li><a href="http://jdcc.ca/data/2014-10-08-15-30-00/problems/A.pdf" target="_blank">JDCC 2014 October A</a></li>
+		</ul>
+		
+	</div>
+	
+	<span id="footer"></span>
+    <span id="header"></span>
+	
+	<script src="http://cs.justinpu.ca/highlight/highlight.pack.js"></script>
+	<script>hljs.initHighlightingOnLoad();</script>
+	<script src="http://cs.justinpu.ca/script.js"></script>
+</body>
+</html>

@@ -1,0 +1,318 @@
+<!doctype html>
+<html>
+<head>
+	<title>JDCC October 2015 Editorial | cs.justinpu.ca</title>
+	<link rel="stylesheet" type="text/css" href="http://cs.justinpu.ca/stylesheet.css">
+	<link rel="stylesheet" href="http://cs.justinpu.ca/highlight/styles/jpcolour.css">
+	<link rel="icon" type="image/png" href="http://cs.justinpu.ca/icon.png">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+</head>
+<body>
+	<div class="main">
+		<a>C++ Version <a href="http://cs.justinpu.ca/jeditorials/jdcc/oct15/"><small>Java here</small></a></p>
+		<h1>JDCC: October 2015</h1>
+		
+		<h2>Problems</h2>
+		<p><a href="#a" class="internal">Problem A: Guessing Game</a><br />
+		<a href="#b" class="internal">Problem B: Programming Elections</a><br />
+		<a href="#c" class="internal">Problem C: Test Candy</a><br />
+		<a href="#d" class="internal">Problem D: Basically Right</a><br />
+		<a href="#e" class="internal">Problem E: Estuary</a></p>
+		
+		<h2 id="a">Problem A: Guessing Game</h2>
+		<p>This problem is a simple conditionals problem. Given your guess and how much you were off by, there are only two possibilities for the correct number, adding or subtracting the amount that the guess was off by. </p>
+		
+		<p>We use the if structure to determine if adding the amount is correct, if so, print out the guess with the amount added, otherwise, print out the number with the amount subtracted. </p>
+		
+		<pre><code>#include &ltfstream&gt
+#include &ltcmath&gt
+
+using namespace std;
+
+int main() {
+	ifstream in("A.in");
+	ofstream out("A.out");
+	
+	int T;
+	in >> T;
+	for(int t = 0; t &lt T; t++) {
+		int N1, M1, N2, M2;
+		in >> N1 >> M1 >> N2 >> M2;
+		
+		if( (int) abs(N1 + M1 - N2) == M2) // If above
+			out << N1 + M1 << endl;
+		else
+			out << N1 - M1 << endl;
+	}
+	
+	in.close();
+	out.close();
+	return 0;
+}</code></pre>
+		<h2 id="b">Problem B: Programming Elections</h2>
+		
+		<p>This problem is a basic searching problem. Since, the list isn't sorted and we have to read in the input anyways, we have to search through every name and score, but we can do this while reading in input. Just create four variables: to store the number of highest number of votes (so far) and the name of the (so far) winning candidate, for both genders. While reading input we check if the number of votes the candidate has is greater than the current winning candidate, for the respective gender. If so, then they become the new current winner. After reading all input, we print the name of the winners. </p>
+		
+		<pre><code>#include &ltfstream&gt
+#include &ltstring&gt
+
+using namespace std;
+
+int main() {
+	ifstream in("B.in");
+	ofstream out("B.out");
+	
+	int T;
+	in >> T;
+	for(int t = 0; t &lt T; t++) {
+		int N;
+		in >> N;
+		
+		string mname, fname; // Male and female names
+		int mmax = 0, fmax = 0; // Male and female max votes
+		
+		for(int n = 0; n &lt N; n++) {
+			string name, gender;
+			int votes;
+			in >> name >> gender >> votes;
+			if(gender == "M") {
+				if(votes &gt mmax) {
+					mmax = votes;
+					mname = name;
+				}
+			} else { // If not male, then female
+				if(votes &gt fmax) {
+					fmax = votes;
+					fname = name;
+				}
+			}
+		}
+		out << fname << " " << mname << endl;
+	}
+	
+	in.close();
+	out.close();
+	return 0;
+}</code></pre>
+		<h2 id="c">Problem C: Test Candy</h2>
+		
+		<p>This problem is a simple iterative processing problem. We have to iterate through all the marks to find the average mark. We will lower each student's mark by a set amount so that the class average is exactly 50%. Therefore, if your mark is higher than or equal to the current class average, you pass and get a candy. We don't actually need to change the array of marks. </p>
+		
+		<pre><code>#include &ltfstream&gt
+#include &ltvector&gt
+
+using namespace std;
+
+int main() {
+	ifstream in("C.in");
+	ofstream out("C.out");
+	
+	int T;
+	in >> T;
+	for(int t = 0; t &lt T; t++) {
+		int N;
+		in >> N;
+		vector&ltdouble&gt marks(N); // The test marks of the students
+		double sum = 0;	// Sum of all the test marks
+		
+		for(int n = 0; n &lt N; n++) { // Input
+			in >> marks[n];
+			sum += marks[n];
+		}
+		
+		double average = sum / (int) N; // Average test mark
+		int total = 0; // Total amount of candy given out
+		
+		for(int n = 0; n &lt N; n++)
+			if(marks[n] - average &gt= 0) // If student passes, give one candy
+				total++;
+		out << total << endl;
+	}
+	
+	in.close();
+	out.close();
+	return 0;
+}</code></pre>
+		
+		<h2 id="d">Problem D: Basically Right</h2>
+		
+		<p>This problem is a brute force problem. We just simply test all the possible bases and print out the percentage score of the highest mark found. We can slightly enhance the algorithm by starting to check at the lowest possible base (either 2 or the highest digit + 1). It is easier to use printf to output data because we have to round to the answer to 6 demical places. </p>
+		
+		<p>To convert to difference bases, we multiply the digit by the corresponding power (exponent) of the base and sum up all these products. We can perform this operation with a string. <code>'0'</code> has an ASCII code of <code>48</code>. At the <code>n</code><sup>th</sup> position, the product to be added is <code>num[n] * base<sup>num.size - n - 1</sup></code>. Finally, we multiply the mark by 100 to get a percent. 
+		
+		<pre><code>#include &ltstdio.h&gt
+#include &ltfstream&gt
+#include &ltcmath&gt
+#include &ltstring&gt
+#include &ltsstream&gt
+
+using namespace std;
+
+long long int to_base(string num, int base) { // Num is a base10 number, base is the target
+	long long int exp = 1; // Exponent value of the base
+	long long int value = 0; // Value of the number in the given base
+	for(int i = num.length() - 1; i &gt= 0; i--) {
+		value += (num[i] - 48) * exp;
+		exp *= base;
+	}
+	return value;
+}
+
+int main() {
+	ifstream in("D.in");
+	FILE* out = fopen("D.out", "w");
+	
+	int T;
+	in >> T;
+	for(int t = 0; t &lt T; t++) {
+		string N, D;
+		in >> N >> D;
+		char maxdig = '2'; // Highest digit in both numerator and denominator.
+		int maxbase;	// The denominator
+		stringstream(D) >> maxbase;
+		
+		for(int i = 0; i &lt N.length(); i++)
+			if(N[i] &gt maxdig)
+				maxdig = N[i];
+		for(int i = 0; i &lt D.length(); i++)
+			if(D[i] &gt maxdig)
+				maxdig = D[i];
+		
+		double maxmark = 0; // The maximum mark that she can obtain
+		for(int base = maxdig - 47; base &lt maxbase; base++)
+			if(to_base(N, base) / (double) to_base(D, base) > maxmark)
+				maxmark = to_base(N, base) / (double) to_base(D, base);
+		fprintf(out, "%.6lf\n", maxmark * 100); // Rounding to 6 decimal places
+	}
+	fclose(out);
+	return 0;
+}</code></pre>
+		
+		<h2 id="e">Problem E: Estuary</h2>
+		
+		<p>This problem is a Depth First Search (DFS) and Floodfill/Breadth First Search (BFS) problem. We use a recursive DFS to search through all the paths and find the one with the lowest maximum spike. To optimize the search, we use an array to store the shortest maximum level of that coordinate. If a shorter path to that location already exists, then the instance of the stack call is halted. Otherwise, the current maximum of the path becomes the new minimum of that coordinate in the shortest level array. </p>
+		
+		<p>For these search algorithms, there are only 4 directions in which the water can flow, so we just check if the water can flow in each direction, if so, then check there. </p>
+		
+		<p>After we have found the path that has the lowest obstacle, we add one to the level (because the water level has to be higher than the block level to flow over). We now use the floodfill/BFS to determine all the blocks to be filled with water and the amount of water in each. The amount of water on each block is added to the total volume counter. The amount of water is <code>waterlevel - blocklevel</code>. Once we get to the end point, the flowing stops, so we make sure to not continue the search afterwards. </p>
+		
+		<p>Finally, the total volume is printed out. Don't forget the modulo! </p>
+		
+		<pre><code>#include &ltfstream&gt
+#include &ltvector&gt
+#include &ltqueue&gt
+
+using namespace std;
+
+int R, C; // Rows, Columns
+int minimum;
+
+vector&ltvector&ltint&gt &gt grid;
+vector&ltvector&ltint&gt &gt visited;
+
+struct coordinate { // Coordinate
+	int x, y;
+	
+	coordinate(int x, int y) {
+		this -&gt x = x;
+		this -&gt y = y;
+	}
+};
+
+void check(int c, int r, int max) {
+	if(grid[c][r] &gt max) // If the current level is higher than the max of the path
+		max = grid[c][r];
+	if(visited[c][r] == -1 || visited[c][r] &gt max) // New record for the path
+		visited[c][r] = max;
+	else
+		return;
+	if(minimum != -1 && max &gt= minimum) // If a lower path has been traversed
+		return;
+	if(c == C - 1 && r == R - 1 && (max &lt minimum || minimum == -1)) { // End reached
+		minimum = max;
+		return;
+	}
+	
+	if(r &gt 0) // Up
+		check(c, r - 1, max);
+	if(c &lt C - 1) // Right
+		check(c + 1, r, max);
+	if(r &lt R - 1) // Down
+		check(c, r + 1, max);
+	if(c &gt 0) // Left
+		check(c - 1, r, max);
+}
+
+int main() {
+    ifstream in("E.in");
+    ofstream out("E.out");
+    
+    int T;
+    in >> T;
+    for(int t = 0; t &lt T; t++) {
+        in >> R >> C;
+        
+        grid = vector&ltvector&ltint&gt &gt(C, vector&ltint&gt (R));
+        visited = vector&ltvector&ltint&gt &gt(C, vector&ltint&gt (R, -1));
+        minimum = -1;
+        
+        for(int r = 0; r &lt R; r++){
+            for(int c = 0; c &lt C; c++){
+                in >> grid[c][r];
+            }
+        }
+        check(0, 0, 0);
+        
+        minimum++;
+        long long int volume = 0; // Volume of water needed
+		
+	    vector&ltvector&ltbool&gt &gt filled(C, vector&ltbool&gt(R, false)); // Whether the block has been filled
+	    filled[0][0] = true;
+	    queue&ltcoordinate&gt Q; // The queue
+	    Q.emplace(0, 0); // Start point of filling
+	    while(!Q.empty()) {
+	        if(grid[Q.front().x][Q.front().y] &lt minimum) {
+				coordinate coord = Q.front();
+	            volume += minimum - grid[coord.x][coord.y];
+	            if(coord.x == C - 1 && coord.y == R - 1) { // Stops at end
+					Q.pop();
+					filled[C - 1][R - 1] = true;
+					continue;
+	            }
+	            if(coord.y &gt 0 && !filled[coord.x][coord.y - 1]) { // Up
+	                Q.emplace(coord.x, coord.y - 1);
+	                filled[coord.x][coord.y - 1] = true;
+	            }
+	            if(coord.x &lt C - 1 && !filled[coord.x + 1][coord.y]) { // Right
+	                Q.emplace(coord.x + 1, coord.y);
+	                filled[coord.x + 1][coord.y] = true;
+	            }
+	            if(coord.y &lt R - 1 && !filled[coord.x][coord.y + 1]) { // Down
+	                Q.emplace(coord.x, coord.y + 1);
+	                filled[coord.x][coord.y + 1] = true;
+	            }
+	            if(coord.x &gt 0 && !filled[coord.x - 1][coord.y]) { // Left
+	                Q.emplace(coord.x - 1, coord.y);
+	                filled[coord.x - 1][coord.y] = true;
+	            }
+	        }
+	        Q.pop();
+	    }
+	    out << volume % 1000000007 << endl; // Modulo
+    }
+    
+    in.close();
+    out.close();
+    return 0;
+}</code></pre>
+		
+	</div>
+	
+	<span id="footer"></span>
+    <span id="header"></span>
+	
+	<script src="http://cs.justinpu.ca/highlight/highlight.pack.js"></script>
+	<script>hljs.initHighlightingOnLoad();</script>
+	<script src="http://cs.justinpu.ca/script.js"></script>
+</body>
+</html>

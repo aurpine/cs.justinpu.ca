@@ -1,0 +1,388 @@
+<!doctype html>
+<html>
+<head>
+	<title>Mackenzie New Year's Challenge Editorial | cs.justinpu.ca</title>
+	<link rel="stylesheet" type="text/css" href="http://cs.justinpu.ca/stylesheet.css">
+	<link rel="stylesheet" href="http://cs.justinpu.ca/highlight/styles/jpcolour.css">
+	<link rel="icon" type="image/png" href="http://cs.justinpu.ca/icon.png">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+</head>
+<body>
+	<div class="main">
+		<p>Java version <a href="http://cs.justinpu.ca/editorials/mackenzie_new_years_challenge/"><small>C++ here</small></a></p>
+		<h1>Mackenzie New Year's Challenge</h1>
+        
+        <p>Note: Some implementations are left out. Also, they will be left as a practice. The problems will remain on DMOJ. You will still be able to submit your own solutions. </p>
+		
+		<h2>Problems</h2>
+        <ul>
+            <li><a href="#p1" class="internal">P1: King Modulus</a></li>
+            <li><a href="#p2" class="internal">P2: Moore's Law</a></li>
+            <li><a href="#p3" class="internal">P3: ECOO!</a></li>
+            <li><a href="#p4" class="internal">P4: Abdoof</a></li>
+            <li><a href="#p5" class="internal">P5: Jelly</a></li>
+            <li><a href="#p6" class="internal">P6: Rocks</a></li>
+        </ul>
+		
+		<h2 id="p1">P1: King Modulus</h2>
+        <a href="https://dmoj.ca/problem/mnycp1" target="_blank"><small>Problem</small></a>
+        <hr />
+        
+		<p>This is just a simple math problem. It required knowledge on the modulo function. Depending on the language, the function may perform negative modulo correctly or incorrectly. \(-7 \bmod 4 = 1\). Turing and Python, for example, perform this calculation correctly, while other languages such as C++ and Java instead calculate it as \(-7 \bmod 4 = -3\) which is wrong. To fix it up, just add \(M\) to the answer. </p>
+        
+        <p><strong>Complexity:</strong> \(O(1)\)</p>
+        
+        <pre><code class="java">import java.util.*;
+
+public class MNYCP1 {
+    public static void main(String[] args) {
+        Scanner in = new Scanner(System.in);
+        int N = in.nextInt(), M = in.nextInt();
+        N %= M;
+        if(N &lt; 0)
+            N += M;
+        System.out.println(N);
+    }
+}</code></pre>
+        
+		<h2 id="p2">P2: Moore's Law</h2>
+        <a href="https://dmoj.ca/problem/mnycp2" target="_blank"><small>Problem</small></a>
+        <hr />
+        
+		<p>This problem, is yet again, another simple math problem. Use base 2 logarithm to find the number of years it takes for \(2.0\) to become the new number \(C\). Note that it doubles every <b>2 years</b>, and remember to divide \(C\) by \(2.0\) to find the change in clock speed. Then use if structures to determine what to output. </p>
+        
+        <p>Only output <code>Now!</code> when \(C\) is exactly \(2.0\). 
+        
+        <p><strong>Complexity:</strong> \(O(1)\)</p>
+        
+        <pre><code class="java">import java.io.*;
+
+public class MNYCP2 {
+    public static void main(String[] args) throws IOException {
+        BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+        double C = Double.parseDouble(in.readLine());
+        int days = (int) Math.ceil(Math.log(C / 2.0) / Math.log(2)) * 730;
+        boolean first = true;
+        if(days / 365 &gt;= 1) { // Years
+            System.out.print((days / 365) + "Y");
+            first = false;
+            days %= 365;
+        }
+        if(days / 30 &gt;= 1) { // Months
+            if(first)
+                first = false;
+            else
+                System.out.print(" ");
+            System.out.print((days / 30) + "M");
+            days %= 30;
+        }
+        if(days / 7 &gt;= 1) { // Weeks
+            if(first)
+                first = false;
+            else
+                System.out.print(" ");
+            System.out.print((days / 7) + "W");
+            days %= 7;
+        }
+        if(days &gt;= 1) { // Days
+            if(first)
+                first = false;
+            else
+                System.out.print(" ");
+            System.out.print(days + "D");
+        }
+        if(first) // Nothing has been printed yet
+            System.out.print("Now!");
+        System.out.println();
+    }
+}</pre></code>
+        
+		<h2 id="p3">P3: ECOO!</h2>
+        <a href="https://dmoj.ca/problem/mnycp3" target="_blank"><small>Problem</small></a>
+        <hr />
+        
+		<p>This is a search implementation problem. Read in all the teams. Find the best girls team and add their team name to the list of team names. Then, find the best 2 teams, excluding the best girls team, and add their team name to the list. If there are not enough teams at any point, then skip that part. E.g. if there are no girls teams, then skip searching for the best girls team. Sort the list and print out the teams. </p>
+        
+        <p><strong>Complexity:</strong> \(O(3N)\)</p>
+        
+        <h3>Alternative</h3>
+        
+        <p>You could also do this by sorting the list of teams. Go through the sorted list, finding the best girls team, optionally removing it afterwards. Then find the next 2 best teams. This method is less efficient, but may be easier to implement. </p>
+        
+        <p><strong>Complexity:</strong> \(O(2N \log N)\)</p>
+        
+        <pre><code class="java">import java.io.*;
+import java.util.*;
+
+public class MNYCP3 {
+    static class Team implements Comparator&lt;Team&gt; {
+        String name;
+        boolean isGirls;
+        int points;
+        Team() { }; // Default constructor
+        Team(String name, boolean isGirls, int points) {
+            this.name = name;
+            this.isGirls = isGirls;
+            this.points = points;
+        }
+        boolean equals(Team comp) {
+            return name.equals(comp.name);
+        }
+        public int compare(Team t1, Team t2) {
+            return t2.points - t1.points;
+        }
+    }
+    
+    public static void main(String[] args) throws IOException {
+        BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+        int N = Integer.parseInt(in.readLine());
+        ArrayList&lt;Team&gt; general = new ArrayList&lt;Team&gt;();
+        ArrayList&lt;Team&gt; girls = new ArrayList&lt;Team&gt;();
+        for(int n = 0; n &lt; N; n++) {
+            String[] toks = in.readLine().split(" ");
+            general.add(new Team(toks[0], toks[1].equals("girls"), Integer.parseInt(toks[2])));
+            if(general.get(general.size() - 1).isGirls)
+                girls.add(general.get(general.size() - 1));
+        }
+        general.sort(new Team());
+        girls.sort(new Team());
+        ArrayList&lt;String&gt; names = new ArrayList&lt;String&gt;();
+        if(girls.size() &gt; 0) {
+            names.add(girls.get(0).name);
+            general.remove(girls.get(0));
+        }
+        if(general.size() &gt; 0) {
+            names.add(general.get(0).name);
+            if(general.size() &gt; 1)
+                names.add(general.get(1).name);
+        }
+        names.sort(new Comparator&lt;String&gt;() {
+            public int compare(String s1, String s2) {
+                return s1.compareTo(s2);
+            }});
+        for(int i = 0; i &lt; names.size(); i++)
+            System.out.println(names.get(i));
+        if(names.size() == 0)
+            System.out.println("No ECOO :(");
+    }
+}</code></pre>
+		
+		<h2 id="p4">P4: Abdoof</h2>
+        <a href="http://jdcc.ca/data/2015-12-16-15-15-00/problems/D.pdf" target="_blank"><small>PDF</small></a>
+		<hr />
+        
+		<p>This is a string searching problem. Just scan through the whole name and check if it complies with the rules specified. </p>
+        
+        <p><strong>Complexity:</strong> \(O(N)\)</p>
+        
+        <h3>Alternative</h2>
+        
+        <p>Perform this using Java regex. It may be slower internally, but is significantly easier to implement. </p>
+        
+        <pre><code class="java">import java.util.*;
+import java.io.*;
+
+class MNYCP4 {
+    static final String A = "((ch)|(t)|(m)|(bd)|(b)|(d)|(r))";
+    static final String B = "((a)|(e)|(i)|(oo))";
+    static final String C = "((n)|(v)|(f))";
+    
+    static boolean isValid(String word) {
+        // (BC)|(BA)|(AC)|(B?(AB)+(A|C))|(A?(BA)+C)
+        return word.matches("(" + B + C + ")|(" + B + A + ")|(" + A + C + ")|(" + B + "?(" + A + B + ")+" + "(" + A + "|" + C + "))|(" + A + "?(" + B + A + ")+" + C + ")");
+    }
+    
+    public static void main(String[] args) throws IOException {
+        BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+        String[] words = in.readLine().toLowerCase().split(" ");
+        if(words.length &lt; 2) {
+            System.out.println("invalid");
+            return;
+        }
+        for(int w = 0; w &lt; words.length; w++)
+            if(!isValid(words[w])) {
+            System.out.println("invalid");
+            return;
+        }
+        System.out.println("valid");
+    }
+}</code></pre>
+        
+        <p>See the <a href="http://cs.justinpu.ca/jeditorials/mackenzie_new_years_challenge/#p4">Java P4 editorial</a>.</p>
+		
+		<h2 id="p5">P5: Jelly</h2>
+        <a href="https://dmoj.ca/problem/mnycp1" target="_blank"><small>Problem</small></a>
+        <hr />
+        
+        <p>This is a 3D graph theory problem. Use Dijkstra's algorithm to find the optimal path. Once any of the edges is reached, the Julie can escape, and the shortest path has been found. </p>
+        
+        <pre><code class="java">import java.io.*;
+import java.util.*;
+
+public class MNYCP5 {
+    static int X, Y, Z; // Size of the grid
+    
+    static class Jelly {
+        public int x, y, z, ate;
+        Jelly() { }
+        Jelly(int x, int y, int z, int ate) {
+            this.x = x;
+            this.y = y;
+            this.z = z;
+            this.ate = ate;
+        }
+        boolean outside() {
+            return x == 0 || x == X - 1 || y == 0 || y == Y - 1 || z == 0 || z == Z - 1;
+        }
+    }
+    
+    public static void main(String[] args) throws IOException {
+        BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+        String[] temp = in.readLine().split(" ");
+        X = Integer.parseInt(temp[0]);
+        Y = Integer.parseInt(temp[1]);
+        Z = Integer.parseInt(temp[2]);
+        int[][][] density = new int[X][Y][Z], record = new int[X][Y][Z];
+        boolean[][][] visited = new boolean[X][Y][Z];
+        int[][] dir = new int[][] {{1,0,0},{0,1,0},{0,0,1},{-1,0,0},{0,-1,0},{0,0,-1}}; // Directions
+        Jelly julie = new Jelly();
+        
+        for(int z = 0; z &lt; Z; z++) // Input
+            for(int y = 0; y &lt; Y; y++) {
+                 String line = in.readLine();
+                 for(int x = 0; x &lt; X; x++) {
+                     if(line.charAt(x) == 'J') {
+                         julie = new Jelly(x, y, z, 0);
+                         record[x][y][z] = 0;
+                     } else {
+                         density[x][y][z] = line.charAt(x) - '0';
+                         record[x][y][z] = Integer.MAX_VALUE;
+                     }
+                 }
+        }
+        Queue&lt;Jelly&gt;pq = new PriorityQueue&lt;Jelly&gt;(new Comparator&lt;Jelly&gt;() {
+            public int compare(Jelly j1, Jelly j2) {
+                return j1.ate - j2.ate;
+            }}); // Priority queue
+        pq.add(julie); // Start point
+        while(true) {
+            Jelly cur = pq.poll(); // Current
+            int x = cur.x, y = cur.y, z = cur.z;
+            if(cur.outside()) {
+                System.out.println(cur.ate);
+                return;
+            }
+            if(visited[x][y][z])
+                continue;
+            visited[x][y][z] = true;
+            for(int d = 0; d &lt; 6; d++) {
+                int nx = x + dir[d][0], ny = y + dir[d][1], nz = z + dir[d][2];
+                if(!visited[nx][ny][nz] && cur.ate + density[nx][ny][nz] &lt; record[nx][ny][nz]) {
+                    record[nx][ny][nz] = cur.ate + density[nx][ny][nz];
+                    pq.add(new Jelly(nx, ny, nz, record[nx][ny][nz]));
+                }
+            }
+        }
+    }
+}</code></pre>
+        
+        <h2 id="p6">P6: Rocks</h2>
+        <a href="https://dmoj.ca/problem/mnycp1" target="_blank"><small>Problem</small></a>
+        <hr />
+        
+        <p>This is an implementation and data structures problem. You have to use a Fenwick tree and an unordered map to simulate the problem efficiently. The hashmap holds the position of the rocks, given the name. The unique part of this is adding elements into the Fenwick tree. </p>
+        
+        <p><strong>Complexity:</strong></p>
+        <ul>
+            <li>\(O( \log N)\) average for adding</li>
+            <li>\(O( 2 \log N)\) for swapping</li>
+            <li>\(O( 2 \log N)\) for finding mass</li>
+            <li>\(O( \log N + L)\) for replacing </li>
+            <li>\(O(1)\) for finding number of rocks </li>
+        </ul>
+        
+        <pre><code class="java">import java.io.*;
+import java.util.*;
+
+public class MNYCP6 {
+    static int[] masses = new int[10001];
+    static Map&lt;String, Integer&gt; index = new HashMap&lt;String, Integer&gt;();
+    static int[] mass = new int[10001];
+    static int size = 1;
+    
+    static int massOf(String s) { // Finds the mass of a rock
+        int val = 0;
+        for(int i = 0; i &lt; s.length(); i++)
+            val += s.charAt(i) - 'a' + 1;
+        return val;
+    }
+    static void update(int i, int c) { // i - index, c - change
+        for(; i &lt;= size; i += (i & -i)) {
+            masses[i] = masses[i] + c;
+        }
+    }
+    static int sumOf(int i) { // Index
+        if(i == 0)
+            return 0;
+        int sum = 0;
+        for(; i &gt; 0; i -= (i & -i))
+            sum += masses[i];
+        return sum;
+    }
+    static void add(int v) { // Adds new weight v into line of rocks
+        int i = (size & -size);
+        int val = v;
+        for(int n = size - 1; n &gt; size - i; n--)
+            val += mass[n];
+        size++;
+    }
+    
+    public static void main(String[] args) throws IOException {
+        BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+        int C = Integer.parseInt(in.readLine());
+        String[] toks;
+        for(int c = 0; c &lt; C; c++) {
+            toks = in.readLine().split(" ");
+            if(toks[0].equals("A")) { // Add new
+                if(index.get(toks[1]) != null) {  // If rock already exists
+                    System.out.println("Can't add " + toks[1]);
+                    continue;
+                }
+                index.put(toks[1], size);
+                mass[size] = massOf(toks[1]);
+                add(mass[size - 1]);
+            } else if(toks[0].equals("S")) { // Get sum
+                int change = mass[index.get(toks[2])] - mass[index.get(toks[1])];
+                update(index.get(toks[1]), change);
+                update(index.get(toks[2]), -change);
+                int temp = mass[index.get(toks[1])];
+                mass[index.get(toks[1])] = mass[index.get(toks[2])];
+                mass[index.get(toks[2])] = temp;
+                temp = index.get(toks[1]);
+                index.put(toks[1], index.get(toks[2]));
+                index.put(toks[2], temp);
+            } else if(toks[0].equals("M")) { // Find mass
+                System.out.println(sumOf(Math.max(index.get(toks[1]), index.get(toks[2]))) - sumOf(Math.min(index.get(toks[1]), index.get(toks[2])) - 1));
+            } else if(toks[0].equals("R")) { // Replace
+                int ymass;
+                update(index.get(toks[1]), (ymass = massOf(toks[2])) - mass[index.get(toks[1])]);
+                index.put(toks[2], index.get(toks[1]));
+                index.remove(toks[1]);
+                mass[index.get(toks[2])] = ymass;
+            } else if(toks[0].equals("N")) { // Number of rocks
+                System.out.println(size - 1);
+            }
+        }
+    }
+}</code></pre>
+	
+	</div>
+	
+	<span id="footer"></span>
+    <span id="header"></span>
+	
+	<script src="http://cs.justinpu.ca/highlight/highlight.pack.js"></script>
+	<script>hljs.initHighlightingOnLoad();</script>
+	<script src="http://cs.justinpu.ca/script.js"></script>
+</body>
+</html>

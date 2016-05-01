@@ -1,0 +1,157 @@
+<!doctype html>
+<html>
+<head>
+	<title>Data Types | J2C++ | cs.justinpu.ca</title>
+	<link rel="stylesheet" type="text/css" href="http://cs.justinpu.ca/stylesheet.css">
+	<link rel="stylesheet" href="http://cs.justinpu.ca/highlight/styles/jpcolour.css">
+	<link rel="icon" type="image/png" href="http://cs.justinpu.ca/icon.png">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+</head>
+<body>
+	<div class="main">
+	<h1>Data Types</h1>
+	<p>Data types differ slightly. Here's a table with the data types in both languages. </p>
+	
+	<table>
+		<thead>
+			<th>Java</th>
+			<th>C++</th>
+		</thead>
+		</tbody>
+			<tr>
+				<td><code>short</code></td>
+				<td><code>short int</code></td>
+			</tr>
+			<tr>
+				<td><code>int</code></td>
+				<td><code>int</code></td>
+			</tr>
+			<tr>
+				<td><code>long</code></td>
+				<td><code>long long int</code></td>
+			</tr>
+			<tr>
+				<td><code>char</code></td>
+				<td><code>char</code></td>
+			</tr>
+			<tr>
+				<td><code>String</code></td>
+				<td><code>char[]</code></td>
+			</tr>
+			<tr>
+				<td><code>float</code></td>
+				<td><code>float</code></td>
+			</tr>
+			<tr>
+				<td><code>double</code></td>
+				<td><code>double</code></td>
+			</tr>
+			<tr>
+				<td><code>boolean</code></td>
+				<td><code>bool</code></td>
+			</tr>
+			<tr>
+				<td><code>int</code></td>
+				<td><code>int</code></td>
+			</tr>
+		</tbody>
+	</table>
+	
+	<p>C++ has some differences with data types. These different primitive data types will be covered in this section. </p>
+	
+	<h2>Long Long Int</h2>
+	
+	<p>This type seems very verbose. It can be shortened to <code>long long</code>. Similarly, <code>short int</code> can be shortened to <code>short</code>. Why <code>long long int</code> versus <code>long</code>? There's a data type called <code>long int</code>, which uses 32 or 64-bit (<code>int</code> is 32-bit), depending on the system, while <code>long long int</code> is always 64-bit. For this reason, one should never use <code>long int</code>. </p>
+	
+    <h2>Unsigned Integral Numbers</h2>
+	
+	<p>C++ supports the use of <i>unsigned</i> numbers. Normal shorts, ints, longs, etc. are signed, meaning that they can have negative numbers-at the expense of having one less binary digit. Unsigned numbers can only hold non-negative numbers but can store a number two times higher than their signed counterpart. To declare an unsigned number, simply add the keyword before the data type. There are however only five unsigned data types. </p>
+	
+	<pre><code class="c++">unsigned char a;
+unsigned short int b; // Or just short
+unsigned int c;
+unsigned long int d; // Or long
+unsigned long long int e; // Or long long</code></pre>
+    
+    <h2>Long Double</h2>
+	
+	<p>This is a data type that I haven't mentioned yet. It isn't often used, since, it may or may not differ depending on the compiler used. Additionally, floating point (decimal numbers) generally aren't used in programming due to their inaccuracy. The number 0.1, cannot be expressed in binary, (similar to how one third is 0.33333333...), thus, it can become an odd number after a few operations such as 0.99999999999786599040. </p>
+    
+    <h2>Literals</h2>
+    
+    <p>Literals also exist in Java. There are some different literals for different data types. The following code illustrates these differences. </p>
+    
+    <pre><code>short a = 1;
+int b = 2;
+long long int c = 123456789000ll; // Note the ll at the end
+char d = 'A';
+float e = 1.0;
+double f = 1.00001;
+long double g = 1.00000000000000001l; // Note the l
+unsigned long long int g = 123456789000ull; // Note the ull
+unsigned int h = 1u; // Note the u
+int i = 0xFF; // 0x denotes hexadecimal
+long long int j = 0xFFFFFFll; // Hexadecimal long
+unsigned long long int j = 0xFFFFFFull; // Unsigned hexadecimal long
+int k = 0127; // Octal, actual value is 87</code></pre>
+    
+    <p>Notice the <code>LL</code> added to the end of a long literal to permit the unusually long number, that wouldn't be normally valid for a regular sized variable. A <code>u</code> is added at the end to indicate an unsigned number. Similarly, the prefix <code>0x</code> is added to a number to denote that it is in hexadecimal(base 16). The prefix <code>0</code> is added to denote octal (base 8). Any of these modifiers can be added to a number appriopriately. </p>
+    
+    <h2>Booleans</h2>
+	
+	<p>In C, there is no boolean data type, there are only ints. In C++, there is a type, called <code>bool</code>. It is like a combination of C style booleans and Java style booleans. In C, boolean values were expressed as <code>0</code> for false and <code>1</code> for true. In Java as you know, <code>false</code> is false and <code>true</code> is true. In C++, the <code>bool</code> data type accepts both types of <i>literals</i>. You are able to use a <code>bool</code> as an integer. </p>
+	
+	<pre><code class="c++">bool a = true;
+int b = 2 + a; // b now has a value of 3</code></pre>
+    
+    
+	<h2>Strings</h2>
+	
+	<p>Strings in C++ are usually annoying, which is why many prefer Java for string manipulation. C-style strings, are char arrays. These arrays work just like other arrays in C++. Usually, strings are initialized as follows: </p>
+    
+    <pre><code class="cpp">char word[6] = "hello";</code></pre>
+    
+    <p>The length of the char array is 6, one more than the number of letters in the string, because C++ requires the null character (<code>'\0'</code>) to determine the end of the array/string. The above code is equivalent to: </p>
+    
+    <pre><code class="cpp">char word[6] = {'h', 'e', 'l', 'l', 'o', '\0'};</code></pre>
+    
+    <p>The null character doesn't have to be the last character of a char array. </p>
+    
+    <pre><code class="cpp">char word[10] = {'h', 'e', 'l', 'l', 'o', '\0'};</code></pre>
+    
+    <p>A longer array length allows longer strings to be used. This ensures that the string wouldn't be truncated. Declare a string similarly to a 2D array, set a maximum size, either stated in the problem, or a big number like 255 or 100. </p>
+    
+    <p>As you can see, c style strings in C++ are quite complicated. That's why I prefer to use the C++ string. It's a built-in class with many features that Java has. This will be discussed in more detail later on. </p>
+	
+	<h2>Arrays</h2>
+	
+	<p>Arrays in C++ have the same concept as in Java, but the syntax is slightly different. </p>
+    
+    <p>Arrays in Java</p>
+    
+    <pre><code class="java">int[] a;
+int[] b = new int[10];
+int[] c = new int[3] {1, 2, 3};</code></pre>
+    
+    <p>Now the same code in C++</p>
+    
+    <pre><code class="cpp">int a[];
+int b[10];
+int c[3] {1, 2, 3};</code></pre>
+    
+    <p>Arrays will be discussed in further detail in the <a href="http://cs.justinpu.ca/javatoc++/simple_arrays/">Arrays</a> lesson.
+	
+	<h2>Final Variables</h2>
+	
+	<p>The <code>final</code> keyword equivalent in C++ is <code>const</code>, standing for constant. It is used the same way as in Java. </p>
+	
+	</div>
+	
+	<span id="footer"></span>
+    <span id="header"></span>
+	
+	<script src="http://cs.justinpu.ca/highlight/highlight.pack.js"></script>
+	<script>hljs.initHighlightingOnLoad();</script>
+	<script src="http://cs.justinpu.ca/script.js"></script>
+</body>
+</html>

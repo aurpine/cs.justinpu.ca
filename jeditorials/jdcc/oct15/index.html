@@ -1,0 +1,304 @@
+<!doctype html>
+<html>
+<head>
+	<title>JDCC October 2015 Java Editorial | cs.justinpu.ca</title>
+	<link rel="stylesheet" type="text/css" href="http://cs.justinpu.ca/stylesheet.css">
+	<link rel="stylesheet" href="http://cs.justinpu.ca/highlight/styles/jpcolour.css">
+	<link rel="icon" type="image/png" href="http://cs.justinpu.ca/icon.png">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+</head>
+<body>
+	<div class="main">
+		<a>Java Version <a href="http://cs.justinpu.ca/editorials/jdcc/oct15/"><small>C++ here</small></a></p>
+		<h1>JDCC: October 2015</h1>
+		
+		<h2>Problems</h2>
+		<p><a href="#a" class="internal">Problem A: Guessing Game</a><br />
+		<a href="#b" class="internal">Problem B: Programming Elections</a><br />
+		<a href="#c" class="internal">Problem C: Test Candy</a><br />
+		<a href="#d" class="internal">Problem D: Basically Right</a><br />
+		<a href="#e" class="internal">Problem E: Estuary</a></p>
+		
+		<h2 id="a">Problem A: Guessing Game</h2>
+		<p>This problem is a simple conditionals problem. Given your guess and how much you were off by, there are only two possibilities for the correct number, adding or subtracting the amount that the guess was off by. </p>
+		
+		<p>We use the if structure to determine if adding the amount is correct, if so, print out the guess with the amount added, otherwise, print out the number with the amount subtracted. </p>
+		
+		<pre><code class="java">import java.util.*;
+import java.io.*;
+
+class Oct15A {
+    public static void main(String[] args) throws IOException {
+        Scanner in = new Scanner(new FileReader("A.in"));
+        PrintWriter out = new PrintWriter(new FileWriter("A.out"));
+        
+        int T = in.nextInt();
+        for(int t = 0; t &lt T; t++) {
+            int N1 = in.nextInt(), // Number 1
+                M1 = in.nextInt(), // Amount off 1
+                N2 = in.nextInt(), // Number 2
+                M2 = in.nextInt(); // Amount off 2
+            if(Math.abs(N1 + M1 - N2) == M2) // If actual is above guess
+                out.println(N1 + M1);
+            else
+                out.println(N1 - M1);
+        }
+        out.close();
+    }
+}</code></pre>
+		<h2 id="b">Problem B: Programming Elections</h2>
+		
+		<p>This problem is a basic searching problem. Since, the list isn't sorted and we have to read in the input anyways, we have to search through every name and score, but we can do this while reading in input. Just create four variables: to store the number of highest number of votes (so far) and the name of the (so far) winning candidate, for both genders. While reading input we check if the number of votes the candidate has is greater than the current winning candidate, for the respective gender. If so, then they become the new current winner. After reading all input, we print the name of the winners. </p>
+		
+		<pre><code class="java">import java.util.*;
+import java.io.*;
+
+class Oct15B {
+    public static void main(String[] args) throws IOException {
+        Scanner in = new Scanner(new FileReader("B.in"));
+        PrintWriter out = new PrintWriter(new FileWriter("B.out"));
+        
+        int T = in.nextInt();
+        for(int t = 0; t &lt T; t++) {
+            int N = in.nextInt();
+            
+            String mname = "", fname = ""; // Male and female names
+            int mmax = 0, fmax = 0; // Male and female max votes
+            
+            for(int n = 0; n &lt N; n++) {
+                String name = in.next(), gender = in.next();
+                int votes = in.nextInt();
+                if(gender.equals("M")) {
+                    if(votes > mmax) {
+                        mmax = votes;
+                        mname = name;
+                    }
+                } else { // If not male, then is female
+                    if(votes &gt fmax) {
+                        fmax = votes;
+                        fname = name;
+                    }
+                }
+            }
+            out.println(fname + " " + mname);
+        }
+        out.close();
+    }
+}</code></pre>
+		<h2 id="c">Problem C: Test Candy</h2>
+		
+		<p>This problem is a simple iterative processing problem. We have to iterate through all the marks to find the average mark. We will lower each student's mark by a set amount so that the class average is exactly 50%. Therefore, if your mark is higher than or equal to the current class average, you pass and get a candy. We don't actually need to change the array of marks. </p>
+		
+		<pre><code class="java">import java.util.*;
+import java.io.*;
+
+class Oct15C {
+    public static void main(String[] args) throws IOException {
+        Scanner in = new Scanner(new FileReader("C.in"));
+        PrintWriter out = new PrintWriter(new FileWriter("C.out"));
+        
+        int T = in.nextInt();
+        for(int t = 0; t &lt T; t++) {
+            int N = in.nextInt();
+            double[] marks = new double[N]; // The test marks of the students
+            double sum = 0; // Sum of all the test marks
+            
+            for(int n = 0; n &lt N; n++) { // Input
+                marks[n] = in.nextInt();
+                sum += marks[n];
+            }
+            
+            double average = sum / N; // Average test mark
+            int total = 0; // Total amount of candy given out
+            
+            for(int n = 0; n &lt N; n++)
+                if(marks[n] - average &gt= 0) // If student passes, give one candy
+                    total++;
+            
+            out.println(total);
+        }
+        
+        out.close();
+    }
+}</code></pre>
+		
+		<h2 id="d">Problem D: Basically Right</h2>
+		
+		<p>This problem is a brute force problem. We just simply test all the possible bases and print out the percentage score of the highest mark found. We can slightly enhance the algorithm by starting to check at the lowest possible base (either 2 or the highest digit + 1). It is easier to use <code>printf</code> to output data because we have to round to the answer to 6 demical places. <code>printf()</code> is an output method that was originally from C/C++. <code>"%.6f"</code> is the format specifier for a double with 6 digits after the decimal. </p>
+		
+		<p>To convert to difference bases, we multiply the digit by the corresponding power (exponent) of the base and sum up all these products. We can perform this operation with a string. <code>'0'</code> has an ASCII code of <code>48</code>. At the <code>n</code><sup>th</sup> position, the product to be added is <code>num[n] * base<sup>num.size - n - 1</sup></code>. Finally, we multiply the mark by 100 to get a percent. 
+		
+		<pre><code class="java">import java.util.*;
+import java.io.*;
+
+class Oct15D {
+    
+    static double to_base(String num, int base) { // Converting from a given base
+        long pow = 1; // Power of the base
+        double value = 0; // Value of the number if it were in the given base
+        for(int i = num.length() - 1; i &gt= 0; i--) {
+            value += (num.charAt(i) - 48) * pow;
+            pow *= base;
+        }
+        return value;
+    }
+    
+    public static void main(String[] args) throws IOException {
+        Scanner in = new Scanner(new FileReader("D.in"));
+        PrintWriter out = new PrintWriter(new FileWriter("D.out"));
+        
+        int T = in.nextInt();
+        for(int t = 0; t &lt T; t++) {
+            String N = in.next(), D = in.next();
+            char maxdig = '2'; // Highest digit in both numerator and denominator
+            int maxbase = Integer.parseInt(D); // The denominator
+            
+            for(int i = 0; i &lt N.length(); i++)
+                if(N.charAt(i) &gt maxdig)
+                    maxdig = N.charAt(i);
+            for(int i = 0; i &lt D.length(); i++)
+                if(D.charAt(i) &gt maxdig)
+                    maxdig = D.charAt(i);
+            
+            double maxmark = 0; // The maximum mark that she can obtain
+            for(int base = maxdig - 47; base &lt maxbase; base++)
+                if(to_base(N, base) / to_base(D, base) &gt maxmark)
+                    maxmark = to_base(N, base) / to_base(D, base);
+            
+            out.printf("%.6f\n", maxmark * 100); // Rounding to 6 decimal places
+        }
+        out.close();
+    }
+}</code></pre>
+		
+		<h2 id="e">Problem E: Estuary</h2>
+		<p><small>Note: It is recommended that you read the description while referring to the source code for better understanding. </small></p>
+		
+		<p>This problem is a Depth First Search (DFS) and Floodfill/Breadth First Search (BFS) problem. We use a recursive DFS to search through all the paths and find the one with the lowest level path-the level of the path being the highest block. To optimize the search, we use an array to store the shortest level of a path to that coordinate so far. If a shorter path to that location already exists, then the instance of the stack call is halted. Otherwise, the current maximum of the path becomes the new minimum of that coordinate in the shortest level array. </p>
+		
+		<p>For these search algorithms, there are only 4 directions in which the water can flow, so we just check if water can flow in each direction, if so, then check there. </p>
+		
+		<p>It is important to note that the column (C) is the x location and rows (R) is the y location. A point on the grid would be (c, r) and not (r, c). The question is also misleading. The water should stop flowing at (C, R) and not (R, C). Using the coordinates as stated in the problem may cause array out of bounds, but if the grid is a square, then there's nothing to worry about. In this solution, all the arrays are 0 indexed, meaning that it starts at (0, 0) and ends at (C, R). </p>
+		
+		<p>After we have found the path that has the lowest obstacle, we add one to the level (because the water level has to be higher than the block level to flow over). We now use the floodfill/BFS to determine all the blocks to be filled with water and the amount of water in each. The amount of water on each block is added to the total volume counter. The amount of water is <code>waterlevel - blocklevel</code>. Once we get to the end point, the flowing stops, so we make sure to not continue the search past the end point. </p>
+		
+		<p>To implement the Breadth First Search, we use a <code>Queue</code>, more specifically, a <code>LinkedList</code>. A queue is a first-in-first-out (FIFO) data structure. This is so that once we know that water exists in one block, only then can there be water that flowed from the block to adjacent blocks. We use the <code>Point</code> class to store the next coordinate to check. We also use a <code>filled</code> array to store whether this block has already been checked to avoid filling multiple times. This way, we cover all blocks on the grid in a timely fashion. </p>
+		
+		<p>Finally, the total volume is printed out. Don't forget the modulo as stated in the problem! </p>
+		
+		<p>IMPORTANT! THIS PROGRAM DOES NOT WORK ON DR JAVA. IT DOES HOWEVER WORK ON READY TO PROGRAM AND HAS BEEN MODIFIED TO BE COMPATIBLE WITH JAVA 1.4.2!</p>
+		
+		<pre><code class="java">import java.io.*;
+import java.awt.Point; // Point class
+import java.util.*; // LinkedList (Queue)
+
+class Oct15E3 {
+    static int[][] terrain; // The height of the blocks
+    static int[][] visited; // The previous record low level to this block 
+    static Point[][] coordinates; // Coordinates of next block for BFS Flood fill
+    static int minimum; // The lowest level
+    static int R, C; // Rows and Columns
+    
+    static void check(int c, int r, int max) {
+        if(max &gt= minimum)
+            return;
+        if(terrain[c][r] &gt max) // If this is the new highest point
+            max = terrain[c][r];
+        if(visited[c][r] &gt max) // If this is the lowest path
+            visited[c][r] = max;
+        else // If a lower path has been traversed already, then stop
+            return;
+        
+        if(c == C - 1 && r == R - 1) { // If the reached the end
+            minimum = max;
+            return;
+        }
+        
+        if(r &gt 0 && max &lt visited[c][r - 1] && terrain[c][r - 1] &lt minimum && max &lt visited[c][r - 1]) // Up
+            check(c, r - 1, max);
+        if(c &lt C - 1 && max &lt visited[c + 1][r] && terrain[c + 1][r] &lt minimum && max &lt visited[c + 1][r]) // Right
+            check(c + 1, r, max);
+        if(r &lt R - 1 && max &lt visited[c][r + 1] && terrain[c][r + 1] &lt minimum && max &lt visited[c][r + 1]) // Down
+            check(c, r + 1, max);
+        if(c &gt 0 && max &lt visited[c - 1][r] && terrain[c - 1][r] &lt minimum && max &lt visited[c - 1][r]) // Left
+            check(c - 1, r, max);
+    }
+    
+    public static void main(String[] args) throws IOException {
+        coordinates = new Point[150][150];
+        for(int x = 0; x &lt 150; x++)
+            for(int y = 0; y &lt 150; y++)
+                coordinates[x][y] = new Point(x, y); // Pre-construct the Point objects 
+                
+        BufferedReader in = new BufferedReader(new FileReader("E.in")); // BufferedReader is faster
+        PrintWriter out = new PrintWriter(new FileWriter("E.out"));
+        
+        int T = Integer.parseInt(in.readLine()); // Number of test cases
+        for(int t = 0; t &lt T; t++) {
+            // Input
+            String[] temp = in.readLine().split(" ");
+            R = Integer.parseInt(temp[0]);
+            C = Integer.parseInt(temp[1]);
+            terrain = new int[C][R];
+            visited = new int[C][R];
+            filled = new boolean[C][R];
+            minimum = 1000001;
+            for(int v = 0; v &lt C; v++)
+                Arrays.fill(visited[v], 1000001); // Setting unvisited to infinite (greater than max)
+            for(int r = 0; r &lt R; r++) {
+                String[] row = in.readLine().split(" ");
+                for(int c = 0; c &lt C; c++)
+                    terrain[c][r] = Integer.parseInt(row[c]);
+            }
+            
+            // Finding lowest path
+            check(0, 0, 0);
+            minimum++;
+            
+            // Filling with water
+            long volume = 0;
+            boolean[][] filled; // Whether this block has been filled with water already
+            LinkedList Q = new LinkedList(); // The Queue
+            Q.add(coordinates[0][0]);
+            filled[0][0] = true;
+            while(!Q.isEmpty()) {
+                Point p = (Point) Q.getFirst(); // Get first element
+                Q.removeFirst();
+                volume += minimum - terrain[p.x][p.y];
+                if(p.x == C - 1 && p.y == R - 1) { // Stops at end
+                    continue;
+                }
+                if(p.y &gt 0 && !filled[p.x][p.y - 1] && terrain[p.x][p.y - 1] &lt minimum) { // Up
+                    Q.add(coordinates[p.x][p.y - 1]);
+                    filled[p.x][p.y - 1] = true;
+                }
+                if(p.x &lt C - 1 && !filled[p.x + 1][p.y] && terrain[p.x + 1][p.y] &lt minimum) { // Right
+                    Q.add(coordinates[p.x + 1][p.y]);
+                    filled[p.x + 1][p.y] = true;
+                }
+                if(p.y &lt R - 1 && !filled[p.x][p.y + 1] && terrain[p.x][p.y + 1] &lt minimum) { // Down
+                    Q.add(coordinates[p.x][p.y + 1]);
+                    filled[p.x][p.y + 1] = true;
+                }
+                if(p.x &gt 0 && !filled[p.x - 1][p.y] && terrain[p.x - 1][p.y] &lt minimum) { // Left
+                    Q.add(coordinates[p.x - 1][p.y]);
+                    filled[p.x - 1][p.y] = true;
+                }
+            }
+            out.println(volume % 1000000007); // Modulo
+        }
+        out.close();
+    }
+}
+</code></pre>
+		
+	</div>
+	
+	<span id="footer"></span>
+    <span id="header"></span>
+	
+	<script src="http://cs.justinpu.ca/highlight/highlight.pack.js"></script>
+	<script>hljs.initHighlightingOnLoad();</script>
+	<script src="http://cs.justinpu.ca/script.js"></script>
+</body>
+</html>

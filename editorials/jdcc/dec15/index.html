@@ -1,0 +1,306 @@
+<!doctype html>
+<html>
+<head>
+	<title>JDCC December 2015 Editorial | cs.justinpu.ca</title>
+	<link rel="stylesheet" type="text/css" href="http://cs.justinpu.ca/stylesheet.css">
+	<link rel="stylesheet" href="http://cs.justinpu.ca/highlight/styles/jpcolour.css">
+	<link rel="icon" type="image/png" href="http://cs.justinpu.ca/icon.png">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+</head>
+<body>
+	<div class="main">
+		<a>C++ Version <a href="http://cs.justinpu.ca/jeditorials/jdcc/dec15/"><small>Java here</small></a></p>
+		<h1>JDCC: December 2015</h1>
+		
+		<h2>Problems</h2>
+        <ul>
+            <li><a href="#a" class="internal">Problem A: Countdown</a></li>
+            <li><a href="#b" class="internal">Problem B: Splitting Presents</a></li>
+            <li><a href="#c" class="internal">Problem C: CCC</a></li>
+            <li><a href="#d" class="internal">Problem D: Skiing</a></li>
+            <li><a href="#e" class="internal">Problem E: Fireworks</a>
+                <ul><li><a href="#e2" class="internal">Alternative</a></li></ul>
+            </li>
+        </ul>
+		
+		<h2 id="a">Problem A: Countdown</h2>
+        <a href="http://jdcc.ca/data/2015-12-16-15-15-00/problems/A.pdf" target="_blank"><small>PDF</small></a>
+        <hr />
+        
+		<p>This problem just requires the use of a single for loop to count down. The challenge is implementation for beginner programmers. Count down from \(N\) with a decrement of 1 until 1, then just print 0! and end the line. </p>
+        
+        <p><strong>Complexity:</strong> \(O(N)\)</p>
+		
+		<pre><code class="cpp">#include &lt;fstream&gt;
+
+using namespace std;
+
+int main() {
+    ifstream in("A.in");
+    ofstream out("A.out");
+    int T;
+    in &gt;&gt; T;
+    for(int t = 0; t &lt; T; t++) {
+        int N;
+        in &gt;&gt; N;
+        for(int n = N; n &gt; 0; n--)
+            out &lt;&lt; n &lt;&lt; " ";
+        out &lt;&lt; "0!" &lt;&lt; endl;
+    }
+    return 0;
+}</code></pre>
+        
+		<h2 id="b">Problem B: Splitting Presents</h2>
+        <a href="http://jdcc.ca/data/2015-12-16-15-15-00/problems/B.pdf" target="_blank"><small>PDF</small></a>
+		<hr />
+        
+		<p>This is a greedy solution. Matthew can only get the present when the number of presents is divisible by 1 more than the amount they can take at one time: \(N \bmod (M + 1) = 0\). Just print out who wins using this greedy condition. </p>
+        
+        <p><strong>Complexity:</strong> \(O(1)\)</p>
+		
+		<pre><code class="cpp">#include &lt;fstream&gt;
+
+using namespace std;
+
+int main() {
+    ifstream in("B.in");
+    ofstream out("B.out");
+    int T;
+    in &gt;&gt; T;
+    for(int t = 0; t &lt; T; t++) {
+        int N, M;
+        in &gt;&gt; N &gt;&gt; M;
+        out &lt;&lt; (N % (M + 1) == 0 ? "Matthew" : "Emily") &lt;&lt; endl;
+    }
+    return 0;
+}</code></pre>
+
+		<h2 id="c">Problem C: CCC</h2>
+        <a href="http://jdcc.ca/data/2015-12-16-15-15-00/problems/C.pdf" target="_blank"><small>PDF</small></a>
+		<hr />
+        
+		<p>This is a search/string manipulation problem. Compare all the pairs of lines in the poem. When comparing, add the sum continuous terminal characters for a line. To do this, use a for loop that iterates from the end. Remember to end at a space! Also remember to limit the index to prevent going out of bounds. </p>
+		
+        <p><strong>Complexity:</strong> \(O(\frac{N(N+1)}{2}(C))\), where \(C\) is the number of characters in common between the two lines</p>
+        
+		<pre><code class="cpp">#include &lt;fstream&gt;
+#include &lt;string&gt;
+#include &lt;ctype.h&gt; // tolower
+#include &lt;algorithm&gt; // transform
+#define min(a, b) ((a) &lt; (b) ? (a) : (b))
+
+using namespace std;
+
+int common(string a, string b) { // Finding number of common terminal characters
+    int score = 0;
+    int ilimit = min(a.size(), b.size()) - 1; // Index limit
+    for(int i = 0; i &gt; ilimit && a[a.size() - i - 1] == b[b.size() - i - 1] && a[a.size() - i - 1] != ' '; i++, score++);
+    return score;
+}
+
+int main() {
+    ifstream in("C.in");
+    ofstream out("C.out");
+    int T;
+    in &gt;&gt; T;
+    for(int t = 0; t &lt; T; t++) {
+        int N;
+        in.ignore(1, '\n'); // To skip new line character
+        string poem[N];
+        for(int n = 0; n &lt; N; n++) {
+            getline(in, poem[n]);
+            transform(poem[n].begin(), poem[n].end(), poem[n].begin(), ::tolower); // Lowercase
+        }
+        int score = 0; // Score counter
+        for(int a = 0; a &lt; N - 1; a++)
+            for(int b = a + 1; b &lt; N; b++)
+                score += common(poem[a], poem[b]);
+        out &lt;&lt; score &lt;&lt; endl;
+    }
+    return 0;
+}</code></pre>
+		
+		<h2 id="d">Problem D: Skiing</h2>
+        <a href="http://jdcc.ca/data/2015-12-16-15-15-00/problems/D.pdf" target="_blank"><small>PDF</small></a>
+		<hr />
+        
+		<p>This is a greedy/math/dynamic programming/divide and conquer solution. Using the property that the number of unique paths available at one place is equal to the sum of the number of paths of adjacent skiiable places. The bottommost row has one single way to descend. Starting from the bottom, traverse upwards and count the number of possibilities. </p>
+        
+        <p>Remember to use a long to store the number of paths as the numbers can get very large. Also remember to modulo by <code>1000000007</code> at the end. </p>
+        
+        <p><strong>Complexity:</strong> \(O(N^2)\)</p>
+        
+        <pre><code class="cpp">#include &lt;fstream&gt;
+
+using namespace std;
+
+int main() {
+    ifstream in("D.in");
+    ofstream out("D.out");
+    int T;
+    in &gt;&gt; T;
+    for(int t = 0; t &lt; T; t++) {
+        int N;
+        in &gt;&gt; N;
+        long long int hill[N][N];
+        for(int y = 0; y &lt; N; y++)
+            for(int x = 0; x &lt; N; x++) {
+                char c;
+                in &gt;&gt; c;
+                hill[x][y] = c == 'O';
+        }
+        long long int paths = 0; // Number of paths
+        for(int y = N - 2; y &gt;= 0; y--)
+            for(int x = 0; x &lt; N; x++)
+                if(hill[x][y]) {
+                    hill[x][y] = 0;
+                    if(x &gt; 0) // Left-bottom
+                        hill[x][y] += hill[x - 1][y + 1];
+                    if(x &lt; N - 1) // Right-bottom
+                        hill[x][y] += hill[x + 1][y + 1];
+                    hill[x][y] += hill[x][y + 1]; // Direct bottom
+                    if(y == 0) // Top row
+                        paths += hill[x][y]; // Add to number of paths
+        }
+        out &lt;&lt; paths % 1000000007 &lt;&lt; endl;
+    }
+    return 0;
+}</code></pre>
+		
+		<h2 id="e">Problem E: Fireworks</h2>
+        <a href="http://jdcc.ca/data/2015-12-16-15-15-00/problems/E.pdf" target="_blank"><small>PDF</small></a>
+		<hr />
+        
+		<p>This is an ad-hoc/simulation problem. First, we create a data structure to store the fireworks. Instead of having a variable for \(L\), we can replace it with a variable to store the end point of the firework, as it is more useful. Note that a firework lasts for \(L - 1\) seconds, and thus ends at \(A + L - 1\) second. We can then read in all the fireworks into an array. We should sort this list of fireworks as it has not been guaranteed in the problem statement to be sorted. It should be sorted in ascending order by start time, \(A\), as this is the order that they will go up into the sky. </p>
+        
+        <p>It's the easiest to override the default operators and using built in sorting functions to sort the array. In this example, we used very bad programming style by overriding the <code>&lt;</code> and the <code>&gt;</code> operators for different functions. See the Java editorial for a better implementation. </p>
+        
+        <p>After sorting the fireworks array, we can start the simulation. We simulate new fireworks being launched and old fireworks run out. We have already sorted the fireworks in the launching order. Next, we need to know the fireworks in their finishing order. To do this on the current fireworks in the sky (that we simulated), we use a <a href="http://www.cplusplus.com/reference/queue/priority_queue/" target="_blank">priority queue</a>, which would sort the current fireworks by ending time. We can now easily remove the next firework to finish or to add the next firework to start. When removing a firework, subtract its brightness increment from the total brightness. </p>
+        
+        <p>If the next firework starts before the next firework ends, then add the firework first. If the next firework to end ends before the next firework starts, then remove the firework first. If firework(s) start at the same time that other firework(s) end, add the firework(s) first. This is implicitly demonstrated in the sample cases. </p>
+        
+        <p>Another important fact to note is that \(N\) is the number of seconds that the show lasts for. Therefore, the brightest moment cannot be after the show ends. Stop the loop once the next action (end or beginning of a firework) occurs past the length of the show. Also stop the loop once there are no more fireworks left to fire. </p>
+        
+        <p><strong>Complexity:</strong> \(O(M \log M + M + 2M \log C)\), where \(C\) is the number of fireworks in the sky simultaneously. </p>
+        
+        <pre><code class="cpp">#include &lt;fstream&gt;
+#include &lt;vector&gt;
+#include &lt;queue&gt;
+#include &lt;algorithm&gt; // Sort
+
+using namespace std;
+
+struct firework {
+    int A, B, end; // end is the end time of the firework
+    
+    firework() { }
+    
+    firework(int A, int L, int B) {
+        this -&gt; A = A;
+        this -&gt; B = B;
+        this -&gt; end = A + L - 1;
+    }
+    
+    bool operator&lt;(const firework& comp) const { // For priority queue
+        return end &gt; comp.end;
+    }
+    
+    bool operator&gt;(const firework& comp) const { // For sorting array
+        return  A &lt; comp.A;
+    }
+};
+
+int main() {
+    ifstream in("E.in");
+    ofstream out("E.out");
+    int T;
+    in &gt;&gt; T;
+    for(int t = 0; t &lt; T; t++) {
+        int N, M;
+        in &gt;&gt; N &gt;&gt; M;
+        vector&lt;firework&gt; fireworks(M); // Fireworks
+        for(int m = 0; m &lt; M; m++) {
+            int A, L, B;
+            in &gt;&gt; A &gt;&gt; L &gt;&gt; B;
+            fireworks[m] = firework(A, L, B);
+        }
+        sort(fireworks.begin(), fireworks.end(), greater&lt;firework&gt;()); // Sorting
+        priority_queue&lt;firework&gt; sky; // Fireworks currently in the sky
+        sky.push(fireworks[0]);
+        int m = 1; // Index of next firework to go off
+        int max = 0, maxb = 0, currentb = fireworks[0].B;
+        while(sky.top().end &lt;= N && m &lt; M - 1) { // Don't go past the end of the show
+            if(currentb &gt;= maxb) {
+                maxb = currentb;
+                max = sky.top().end; // Taking the latest time of this period
+            }
+            if(sky.empty() || sky.top().end &gt;= fireworks[m].A) { // Add fireworks first
+                sky.push(fireworks[m]);
+                currentb += fireworks[m].B;
+                m++;
+            } else {
+                currentb -= sky.top().B;
+                sky.pop();
+            }
+        }
+        out &lt;&lt; max &lt;&lt; endl;
+    }
+    return 0;
+}</code></pre>
+        
+        <h3 id="e2">Alternative solution</h3>
+        <small>Credits to Reyno Tilikaynen</small>
+        
+        <p>This is still a simulation solution. It is easier to implement and understand, albeit slower. Use an array to store the change in brightness at each time during the show. Add \(B\) to the brightness at the \(A\)<sup>th</sup> second and add \(-B\) brightness to the \(A + L\)<sup>th</sup> second. Since the firework lasts for \(A + L - 1\) seconds, the brightness changes due to the firework after, at \(A + L\). Make sure that the time does not go out of bounds. </p>
+        
+        <p><strong>Complexity:</strong> \(O(2M + N)\), slower because \(N\) can go up to \(10^7\) while \(M\) can only go up to \(10^4\). </p>
+        
+        <p>Read through the whole array, changing the current brightness. Update the brightness if necessary. </p>
+        
+        <pre><code class="cpp">#include &lt;stdio.h&gt;
+#include &lt;vector&gt;
+
+using namespace std;
+
+int main() {
+    ifstream in("E.in");
+    ofstream out("E.out");
+    int T;
+    in &gt;&gt; T;
+    for(int t = 0; t &lt; T; t++) {
+        int N, M;
+        in &gt;&gt; N &gt;&gt; M;
+        vector&lt;int&gt; change(N + 1, 0); // Change in brightness
+        
+        for(int m = 0; m &lt; M; m++) {
+            int A, L, B;
+            in &gt;&gt; A &gt;&gt; L &gt;&gt; B;
+            if(A &lt;= N) { // Firework has to start before show
+                change[A] += B;
+                if(A + L &lt;= N) // Firework ends before show
+                    change[A + L] -= B;
+            }
+        }
+        int max = 0, maxb = 0, currentb = 0;
+        for(int n = 1; n &lt;= N; n++) {
+            currentb += change[n];
+            if(currentb &gt;= maxb) {
+                maxb = currentb;
+                max = n;
+            }
+        }
+        out &lt;&lt; max &lt;&lt; endl;
+    }
+    return 0;
+}</code></pre>
+	
+	</div>
+	
+	<span id="footer"></span>
+    <span id="header"></span>
+	
+	<script src="http://cs.justinpu.ca/highlight/highlight.pack.js"></script>
+	<script>hljs.initHighlightingOnLoad();</script>
+	<script src="http://cs.justinpu.ca/script.js"></script>
+</body>
+</html>
